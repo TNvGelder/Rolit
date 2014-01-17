@@ -1,4 +1,4 @@
-package src;
+package Package;
 /**
  * Klasse die het speelbord beschrijft van Rolit.
  * @author Casper
