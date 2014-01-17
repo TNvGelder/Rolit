@@ -14,28 +14,27 @@ public class Board {
     private static final String WHITESPACE = "    ";
 
 	/**
-	 * FType describes the state of a field, which can be the colours red, green, yellow, blue or empty.
+	 * FieldType describes the state of a field, which can be the colours red, green, yellow, blue or empty.
 	 */
-	enum FType {EMPTY, RED, YELLOW, GREEN, BLUE};
 	
 	// -- Instance variables ---------------------------------------------------------//
 	/**
 	 * The board is made out of fields, as described below.
 	 */
-	private FType[][] fields;
-	private FType[] index;
+	private FieldType[][] fields;
+	private FieldType[] index;
 	
 	//---Constructor -----------------------------------------------------------------//
 	/**
 	 * Create a board and set the 4 default fields. 
 	 */
 	public Board(){
-		fields = new FType[ DIM ][ DIM ];
-		index = new FType[ DIM * DIM ];
-		setField( 3 , 3 , FType.RED);
-		setField( 4 , 3 , FType.YELLOW);
-		setField( 4 , 4 , FType.GREEN);
-		setField( 3 , 4 , FType.BLUE);
+		fields = new FieldType[ DIM ][ DIM ];
+		index = new FieldType[ DIM * DIM ];
+		setField( 3 , 3 , FieldType.RED);
+		setField( 4 , 3 , FieldType.YELLOW);
+		setField( 4 , 4 , FieldType.GREEN);
+		setField( 3 , 4 , FieldType.BLUE);
 	}
 	
 	/**
@@ -57,13 +56,13 @@ public class Board {
 	 * @param activeplayer
 	 * @param index
 	 */
-	public void move(int x, int y, FType activeplayer){		
+	public void move(int x, int y, FieldType activeplayer){		
 		if (isValid(x, y, activeplayer)){
 			setField(x, y, activeplayer);
 		};
 		// TO-DO notifyAll() ofzo?? Of iets anders van nextPlayer()?
 	} 							//1: isValid(), 2: setField() (,3: nextPlayer());
-	public void move(int index, FType activeplayer){
+	public void move(int index, FieldType activeplayer){
 		if (isValid(index, activeplayer)){
 			setField(index, activeplayer);
 		}
@@ -75,12 +74,12 @@ public class Board {
 	 * @param y
 	 * @return boolean Whether the move is legal (true) or not (false).
 	 */
-	public boolean isValid(int x, int y, FType player){
+	public boolean isValid(int x, int y, FieldType player){
 		boolean result = false;
 		if( !isAdjacent(x, y)){
 			return false;
 		}
-		else if (isHorBeat(x, y, player) || isVerBeat(x, y, player) || isDiagBeat(toIndex(x,y), player)){ //hor, vert or diag same FType with different FType(s) between with no FType.EMPTY
+		else if (isHorBeat(x, y, player) || isVerBeat(x, y, player) || isDiagBeat(toIndex(x,y), player)){ //hor, vert or diag same FieldType with different FieldType(s) between with no FieldType.EMPTY
 			setXFields(x, y, player);
 			setYFields(x, y, player);
 			setDiagFields(x, y, player);
@@ -91,28 +90,28 @@ public class Board {
 		
 		
 		return result;
-	} //1: isAdjacent() 2: FType;
-	public boolean isValid(int i, FType player){
+	} //1: isAdjacent() 2: FieldType;
+	public boolean isValid(int i, FieldType player){
 		return isValid(toXCoord(i), toYCoord(i), player);
 	}
 	
 	//--- ------------------------------------------------------------------------//
 	
-	public void setField(int x, int y, FType color){
+	public void setField(int x, int y, FieldType color){
 		fields[x][y] = color;
 		setField(toIndex(x, y), color);
 	} //just set it, do not check for legal;
-	public void setField(int i, FType color){
+	public void setField(int i, FieldType color){
 		index[i] = color;
 		setField(toXCoord(i), toYCoord(i), color);
 	}
 		
-	public FType getField(int x, int y){return fields[x][y];} //get tha colours
-	public FType getField(int i){return index[i];}
+	public FieldType getField(int x, int y){return fields[x][y];} //get tha colours
+	public FieldType getField(int i){return index[i];}
 
 
-	public boolean isEmpty(int x, int y){return getField(x, y)==FType.EMPTY;}
-	public boolean isEmpty(int i){return getField(i)==FType.EMPTY;}
+	public boolean isEmpty(int x, int y){return getField(x, y)==FieldType.EMPTY;}
+	public boolean isEmpty(int i){return getField(i)==FieldType.EMPTY;}
 	
 	// --- Game Logic ----------------------------------------------------------------------------//
 	
@@ -137,10 +136,10 @@ public class Board {
 	}
 	
 	/**
-	 * Check if there is another field containing the same FType.
+	 * Check if there is another field containing the same FieldType.
 	 * Requires that isEmpty(x,y)==true.
 	 */
-	public boolean isHorBeat(int x, int y, FType player){
+	public boolean isHorBeat(int x, int y, FieldType player){
 		if (x<7 && getField(x+1)!=player){ //IK ZIE ZE RECHTS
 			for (int i=x+1; i<8; i++){
 				if (getField(i,y)==player){
@@ -153,21 +152,21 @@ public class Board {
 			}
 		}
 	}
-	public boolean isVerBeat(int x, int y, FType player){
+	public boolean isVerBeat(int x, int y, FieldType player){
 		
 	}
-	public boolean isDiagBeat(int i, FType player){
+	public boolean isDiagBeat(int i, FieldType player){
 		
 	}
 	
-	public void setXFields(int x, int y, FType player){}
-	public void setYFields(int x, int y, FType player){}
-	public void setDiagFields(int x, int y, FType player){}
+	public void setXFields(int x, int y, FieldType player){}
+	public void setYFields(int x, int y, FieldType player){}
+	public void setDiagFields(int x, int y, FieldType player){}
 	
 	
 	// --- Helping methods --------------------------------------------------------------------//
 	public int[] getEmptyFields(){} //loop through 'index', 1: if(isEmpty());
-	public int[] getValidList(FType activeplayer){} //for all getEmptyIndices(), 1:isEmpty(), 2:(x, y or diagonal must be one ball (adjacent) with same activeplayer) !iff (must be adjacent);
+	public int[] getValidList(FieldType activeplayer){} //for all getEmptyIndices(), 1:isEmpty(), 2:(x, y or diagonal must be one ball (adjacent) with same activeplayer) !iff (must be adjacent);
 	
 	public boolean isFull(){}
 
