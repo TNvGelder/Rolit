@@ -13,9 +13,6 @@ public class Board {
     private static final String SEPERATOR = INDEXING[0];
     private static final String WHITESPACE = "    ";
 
-	/**
-	 * FieldType describes the state of a field, which can be the colours red, green, yellow, blue or empty.
-	 */
 	
 	// -- Instance variables ---------------------------------------------------------//
 	/**
