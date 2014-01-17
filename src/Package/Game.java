@@ -1,4 +1,4 @@
-package Package;
+package src;
 
 public class Game {
 	
