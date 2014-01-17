@@ -215,12 +215,18 @@ public class Board {
 		String s = "";
 		for (int i = 0; i<DIM; i++){ // ga elke Y af
 			String row = "";
-			for (int j = 0; j<DIM; j++){ //ga elke X af
-				
-			}
-		}
-		
-		return s;
-	}
+            for (int j = 0; j < DIM; j++) {
+                row = row + " " + getField(i, j).toString() + " ";
+                if (j < DIM - 1) {
+                    row = row + "|";
+                }
+            }
+            s = s + row + "		" + INDEXING[(i * 2) - 1];
+            if (i < DIM - 1) {
+                s = s + "\n" + INDEXING[0] + "		" + INDEXING[i * 2] + "\n";
+            }
+        }
+        return s;
+     }
 	
 }
