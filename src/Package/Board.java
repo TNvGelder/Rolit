@@ -213,6 +213,12 @@ public class Board {
 	//toString
 	public String toString(){
 		String s = "";
+		for (int i = 0; i<DIM; i++){ // ga elke Y af
+			String row = "";
+			for (int j = 0; j<DIM; j++){ //ga elke X af
+				
+			}
+		}
 		
 		return s;
 	}
