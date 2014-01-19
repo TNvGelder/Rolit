@@ -8,7 +8,7 @@ import game.FieldType;
 /**
  * Klasse die het speelbord beschrijft van Rolit.
  * @author Casper
- * @version $Revision: 0.1 $
+ * @version $Revision: 0.9 $
  */
 public class Board {
 	
@@ -83,14 +83,12 @@ public class Board {
 		if( !isAdjacent(x, y)){
 			return false;
 		}
-		else if (isBeat(x, y, player)){ //hor, vert or diag same FieldType with different FieldType(s) between with no FieldType.EMPTY
-			turnFields(x, y, player);
+		else if (isBeat(x, y, player)){
+			result = true;
 		}
 		else {
-			return isAdjacent(x, y);
+			result =  isAdjacent(x, y);
 		}
-		
-		
 		return result;
 	} //1: isAdjacent() 2: FieldType;
 	public boolean isValid(int i, FieldType player){
@@ -167,64 +165,128 @@ public class Board {
 	 * Requires that isEmpty(x,y)==true.
 	 */
 	public boolean isBeat(int x, int y, FieldType player){
-		//---------- Horizontal ----------------------------------------------------------------------------//
-		if (x<6 && getField(x+1 ,y)!=FieldType.EMPTY && getField(x+1 ,y)!=player){ 				//IK ZIE ZE RECHTS		i=0,1,2,3,4,5 of 6
-			for (int i=x+1; i<8; i++){					//						i kan 1,2,3,4,5,6 of 7 zijn
+		//---------- Horizontal --------------------------------------------------//
+		if (x<6 && getField(x+1 ,y)!=FieldType.EMPTY && getField(x+1 ,y)!=player){
+			for (int i=x+2; i<8; i++){
 				if (getField(i,y)==player){
 					return true;
 				}
 			}
 		}
-		if (x>1 && getField(x-1 ,y)!=FieldType.EMPTY && getField(x-1 ,y)!=player){ 				//IK ZIE ZE LINKS
-			for (int i=x-1; i>0; i--){					//
+		if (x>1 && getField(x-1 ,y)!=FieldType.EMPTY && getField(x-1 ,y)!=player){
+			for (int i=x-2; i>0; i--){
 				if (getField(i,y)==player){
 					return true;
 				}
 			}
 		}
-		//---------- Vertical ------------------------------------------------------------------------------//
-		if (y<6 && getField(x, y+1)!=FieldType.EMPTY && getField(x, y+1)!=player){ 				//IK ZIE ZE ONDER
-			for (int i=y+1; i<8; i++){					//
+		//---------- Vertical ----------------------------------------------------//
+		if (y<6 && getField(x, y+1)!=FieldType.EMPTY && getField(x, y+1)!=player){
+			for (int i=y+2; i<8; i++){
 				if (getField(x,i)==player){
 					return true;
 				}
 			}
 		}
-		if (y>1 && getField(x, y-1)!=FieldType.EMPTY && getField(x, y-1)!=player){ 				//	BOVEN
-			for (int i=y-1; i>0; i--){					//
+		if (y>1 && getField(x, y-1)!=FieldType.EMPTY && getField(x, y-1)!=player){
+			for (int i=y-2; i>0; i--){
 				if (getField(x,i)==player){
 					return true;
 				}
 			}
 		}
-		//---------- Diagonal ------------------------------------------------------------------------------//
+		//---------- Diagonal ----------------------------------------------------//
 		int z = toIndex(x,y);
 		
-		// --- Links-Boven ---//
+			// --- Links-Boven ---//
 		if (x>1 && y>1 && getField(x-1, y-1)!=FieldType.EMPTY && getField(x-1,y-1)!=player){	
-			//TO-DO: links-boven
+			for (int j = z-18; j>0; j=j-9){ if (getField(j)==player){return true;}}
 		}
-		// --- Rechts-Boven ---//
+			// --- Rechts-Boven ---//
 		if (x<6 && y>1 && getField(x+1, y-1) != FieldType.EMPTY && getField(x+1, y-1) != player){
-			//TO-DO: rechts-boven
+			for (int j = z-14; j>0; j=j-7){ if (getField(j)==player){return true;}}
 		}
-		// --- Links-Onder ---//
+			// --- Links-Onder ---//
 		if (x>1 && y<6 && getField(x-1, y+1) != FieldType.EMPTY && getField(x-1, y+1) != player){
-			//TO-DO: links-onder
+			for (int j = z+14; j>0; j=j+7){ if (getField(j)==player){return true;}}
 		}
-		// --- Rechts-Onder ---//
+			// --- Rechts-Onder ---//
 		if (x<6 && y<6 && getField(x+1, y+1) != FieldType.EMPTY && getField(x+1, y+1) != player){
-			//TO-DO: rechts-onder
+			for (int j = z+18; j>0; j=j+9){ if (getField(j)==player){return true;}}
 		}
-		//--------------------------------------------------------------------------------------------------//
+		//------------------------------------------------------------------------//
 		return false;
 		
 	}
+
+	/**
+	 * Turn the fields while doing a valid move.
+	 * @param i
+	 * @param player
+	 */
+	public void turnFields(int i, FieldType player){
+		turnFields(toXCoord(i), toYCoord(i), player);
+	}
 	
-	public void turnFields(int x, int y, FieldType player){}
-	
-	
+	public void turnFields(int x, int y, FieldType player){
+	//---------- Horizontal --------------------------------------------------//
+		if (x<6 && getField(x+1 ,y)!=FieldType.EMPTY && getField(x+1 ,y)!=player){
+			for (int i=x+2; i<8; i++){
+				if (getField(i,y)!=player){
+					setField(i,y, player);
+				}
+			}
+		}
+		if (x>1 && getField(x-1 ,y)!=FieldType.EMPTY && getField(x-1 ,y)!=player){
+			for (int i=x-2; i>0; i--){
+				if (getField(i,y)!=player){
+					setField(i,y, player);
+				}
+			}
+		}
+	//---------- Vertical ----------------------------------------------------//
+		if (y<6 && getField(x, y+1)!=FieldType.EMPTY && getField(x, y+1)!=player){
+			for (int i=y+2; i<8; i++){
+				if (getField(x,i)!=player){
+					setField(x,i, player);
+				}
+			}
+		}
+		if (y>1 && getField(x, y-1)!=FieldType.EMPTY && getField(x, y-1)!=player){
+			for (int i=y-2; i>0; i--){
+				if (getField(x,i)!=player){
+					setField(x,i, player);
+				}
+			}
+		}
+	//---------- Diagonal ----------------------------------------------------//
+		int z = toIndex(x,y);
+		
+			// --- Links-Boven ---//
+		if (x>1 && y>1 && getField(x-1, y-1)!=FieldType.EMPTY && getField(x-1,y-1)!=player){	
+			for (int j = z-18; j>0; j=j-9){ if (getField(j)!=player){setField(j, player);}}
+		}
+			// --- Rechts-Boven ---//
+		if (x<6 && y>1 && getField(x+1, y-1) != FieldType.EMPTY && getField(x+1, y-1) != player){
+			for (int j = z-14; j>0; j=j-7){ if (getField(j)!=player){setField(j, player);}}
+		}
+			// --- Links-Onder ---//
+		if (x>1 && y<6 && getField(x-1, y+1) != FieldType.EMPTY && getField(x-1, y+1) != player){
+			for (int j = z+14; j>0; j=j+7){ if (getField(j)!=player){setField(j, player);}}
+		}
+			// --- Rechts-Onder ---//
+		if (x<6 && y<6 && getField(x+1, y+1) != FieldType.EMPTY && getField(x+1, y+1) != player){
+			for (int j = z+18; j>0; j=j+9){ if (getField(j)!=player){setField(j, player);}}
+		}
+		//------------------------------------------------------------------------//
+	}
+
+
 	// --- Helping methods --------------------------------------------------------------------//
+	/**
+	 * Get an List of integers with index numbers of empty fields.
+	 * @return
+	 */
 	public List<Integer> getEmptyFields(){
 		List<Integer> efields = new ArrayList<Integer>();
 		for (int i=0; i<64; i++){
@@ -234,15 +296,30 @@ public class Board {
 		}
 		return efields;
 	}
+	
+	/**
+	 * Use the list of indices of empty fields and check for every index whether it's valid or not.
+	 * @param player
+	 * @return
+	 */
 	public List<Integer> getValidList(FieldType player){
 		List<Integer> list = getEmptyFields();
 		for (int i=0; i<list.size(); i++){
-			
+			if (isValid(list.get(i),player)){
+				list.add(i);
+			}
 		}
 		return list;
 	}
 	
-	public boolean isFull(){}
+	public boolean isFull(){
+		boolean result = true;
+		for (int i=0; i<64; i++){
+			if (isEmpty(i)){
+				result = false;
+			}
+		}
+		return result;}
 	
 	
 	//--- Omrekenen -------------------------------------------------------//
