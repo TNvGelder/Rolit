@@ -1,4 +1,10 @@
 package game;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import game.FieldType;
+
 /**
  * Klasse die het speelbord beschrijft van Rolit.
  * @author Casper
@@ -77,10 +83,8 @@ public class Board {
 		if( !isAdjacent(x, y)){
 			return false;
 		}
-		else if (isHorBeat(x, y, player) || isVerBeat(x, y, player) || isDiagBeat(toIndex(x,y), player)){ //hor, vert or diag same FieldType with different FieldType(s) between with no FieldType.EMPTY
-			setXFields(x, y, player);
-			setYFields(x, y, player);
-			setDiagFields(x, y, player);
+		else if (isBeat(x, y, player)){ //hor, vert or diag same FieldType with different FieldType(s) between with no FieldType.EMPTY
+			turnFields(x, y, player);
 		}
 		else {
 			return isAdjacent(x, y);
@@ -94,24 +98,8 @@ public class Board {
 	}
 	
 	//--- ------------------------------------------------------------------------//
+
 	
-<<<<<<< Updated upstream
-	public void setField(int x, int y, FieldType color){
-		fields[x][y] = color;
-		setField(toIndex(x, y), color);
-	} //just set it, do not check for legal;
-	public void setField(int i, FieldType color){
-		index[i] = color;
-		setField(toXCoord(i), toYCoord(i), color);
-	}
-		
-	public FieldType getField(int x, int y){return fields[x][y];} //get tha colours
-	public FieldType getField(int i){return index[i];}
-
-
-	public boolean isEmpty(int x, int y){return getField(x, y)==FieldType.EMPTY;}
-	public boolean isEmpty(int i){return getField(i)==FieldType.EMPTY;}
-=======
 	/**
 	 * Do not use setField() outside of Board. Use move() instead. 
 	 * setField exists so that the constructor doesn't have to to 
@@ -120,23 +108,27 @@ public class Board {
 	 * @param y
 	 * @param color
 	 */
-	public void setField(int x, int y, FType color){
+	public void setField(int x, int y, FieldType color){
 		fields[x][y] = color;
-		setField(toIndex(x, y), color);
+		if (getField(x,y)!=color){
+			setField(toIndex(x, y), color);
+		}
 	}
-	public void setField(int i, FType color){
+	public void setField(int i, FieldType color){
 		index[i] = color;
-		setField(toXCoord(i), toYCoord(i), color);
+		if (getField(i)!=color){
+			setField(toXCoord(i), toYCoord(i), color);
+		}
 	}
 	
 	/**
-	 * Returns whatever FType is in the field.
+	 * Returns whatever FieldType is in the field.
 	 * @param x
 	 * @param y
-	 * @return FType The color of the field in the given position.
+	 * @return FieldType The color of the field in the given position.
 	 */
-	public FType getField(int x, int y){return fields[x][y];}
-	public FType getField(int i){return index[i];}
+	public FieldType getField(int x, int y){return fields[x][y];}
+	public FieldType getField(int i){return index[i];}
 
 	/**
 	 * Returns true if the field is empty.
@@ -144,9 +136,9 @@ public class Board {
 	 * @param y
 	 * @return
 	 */
-	public boolean isEmpty(int x, int y){return getField(x, y)==FType.EMPTY;}
-	public boolean isEmpty(int i){return getField(i)==FType.EMPTY;}
->>>>>>> Stashed changes
+	public boolean isEmpty(int x, int y){return getField(x, y)==FieldType.EMPTY;}
+	public boolean isEmpty(int i){return getField(i)==FieldType.EMPTY;}
+
 	
 	// --- Game Logic ----------------------------------------------------------------------------//
 	
@@ -174,37 +166,84 @@ public class Board {
 	 * Check if there is another field containing the same FieldType.
 	 * Requires that isEmpty(x,y)==true.
 	 */
-	public boolean isHorBeat(int x, int y, FieldType player){
-		if (x<7 && getField(x+1)!=player){ //IK ZIE ZE RECHTS
-			for (int i=x+1; i<8; i++){
+	public boolean isBeat(int x, int y, FieldType player){
+		//---------- Horizontal ----------------------------------------------------------------------------//
+		if (x<6 && getField(x+1 ,y)!=FieldType.EMPTY && getField(x+1 ,y)!=player){ 				//IK ZIE ZE RECHTS		i=0,1,2,3,4,5 of 6
+			for (int i=x+1; i<8; i++){					//						i kan 1,2,3,4,5,6 of 7 zijn
 				if (getField(i,y)==player){
 					return true;
 				}
 			}
 		}
-		if (getField(x-1)!=player){ //IK ZIE ZE LINKS
-			for (int i=x-1; i>0; i--){
+		if (x>1 && getField(x-1 ,y)!=FieldType.EMPTY && getField(x-1 ,y)!=player){ 				//IK ZIE ZE LINKS
+			for (int i=x-1; i>0; i--){					//
+				if (getField(i,y)==player){
+					return true;
+				}
 			}
 		}
-	}
-	public boolean isVerBeat(int x, int y, FieldType player){
+		//---------- Vertical ------------------------------------------------------------------------------//
+		if (y<6 && getField(x, y+1)!=FieldType.EMPTY && getField(x, y+1)!=player){ 				//IK ZIE ZE ONDER
+			for (int i=y+1; i<8; i++){					//
+				if (getField(x,i)==player){
+					return true;
+				}
+			}
+		}
+		if (y>1 && getField(x, y-1)!=FieldType.EMPTY && getField(x, y-1)!=player){ 				//	BOVEN
+			for (int i=y-1; i>0; i--){					//
+				if (getField(x,i)==player){
+					return true;
+				}
+			}
+		}
+		//---------- Diagonal ------------------------------------------------------------------------------//
+		int z = toIndex(x,y);
 		
-	}
-	public boolean isDiagBeat(int i, FieldType player){
+		// --- Links-Boven ---//
+		if (x>1 && y>1 && getField(x-1, y-1)!=FieldType.EMPTY && getField(x-1,y-1)!=player){	
+			//TO-DO: links-boven
+		}
+		// --- Rechts-Boven ---//
+		if (x<6 && y>1 && getField(x+1, y-1) != FieldType.EMPTY && getField(x+1, y-1) != player){
+			//TO-DO: rechts-boven
+		}
+		// --- Links-Onder ---//
+		if (x>1 && y<6 && getField(x-1, y+1) != FieldType.EMPTY && getField(x-1, y+1) != player){
+			//TO-DO: links-onder
+		}
+		// --- Rechts-Onder ---//
+		if (x<6 && y<6 && getField(x+1, y+1) != FieldType.EMPTY && getField(x+1, y+1) != player){
+			//TO-DO: rechts-onder
+		}
+		//--------------------------------------------------------------------------------------------------//
+		return false;
 		
 	}
 	
-	public void setXFields(int x, int y, FieldType player){}
-	public void setYFields(int x, int y, FieldType player){}
-	public void setDiagFields(int x, int y, FieldType player){}
+	public void turnFields(int x, int y, FieldType player){}
 	
 	
 	// --- Helping methods --------------------------------------------------------------------//
-	public int[] getEmptyFields(){} //loop through 'index', 1: if(isEmpty());
-	public int[] getValidList(FieldType activeplayer){} //for all getEmptyIndices(), 1:isEmpty(), 2:(x, y or diagonal must be one ball (adjacent) with same activeplayer) !iff (must be adjacent);
+	public List<Integer> getEmptyFields(){
+		List<Integer> efields = new ArrayList<Integer>();
+		for (int i=0; i<64; i++){
+			if (getField(i)==FieldType.EMPTY){
+				efields.add(i);
+			}
+		}
+		return efields;
+	}
+	public List<Integer> getValidList(FieldType player){
+		List<Integer> list = getEmptyFields();
+		for (int i=0; i<list.size(); i++){
+			
+		}
+		return list;
+	}
 	
 	public boolean isFull(){}
-
+	
 	
 	//--- Omrekenen -------------------------------------------------------//
 	//---------------------------------------------------------------------//
@@ -241,7 +280,7 @@ public class Board {
 	 * @return
 	 */
 	public boolean gameOver(){
-		return isFull();
+		return false; //isFull();
 	}
 	
 	//toString
@@ -250,7 +289,7 @@ public class Board {
 		for (int i = 0; i<DIM; i++){ // ga elke Y af
 			String row = "|";
             for (int j = 0; j < DIM; j++) { // ga elke X af
-            	if (getField(i,j)==FType.EMPTY){
+            	if (getField(i,j)== FieldType.EMPTY ){
             		String number = "";
             		if (toIndex(i,j)<10){
             			number = "0" + toIndex(i,j);
@@ -262,10 +301,10 @@ public class Board {
             	}
             	else {
             		String field = "";
-            		if (getField(i,j)==FType.RED){field = "RED ";}
-            		else if (getField(i,j)==FType.YELLOW){field = "YELL";}
-            		else if (getField(i,j)==FType.GREEN){field = "GREE";}
-            		else if (getField(i,j)==FType.BLUE){field = "BLUE";}
+            		if (getField(i,j)==FieldType.RED){field = "RED ";}
+            		else if (getField(i,j)==FieldType.YELLOW){field = "YELL";}
+            		else if (getField(i,j)==FieldType.GREEN){field = "GREE";}
+            		else if (getField(i,j)==FieldType.BLUE){field = "BLUE";}
             		row = row + field + "|";
             	}
             }
@@ -273,5 +312,9 @@ public class Board {
         }
         return s;
      }
+	public static void main(String args[]){
+		Board board = new Board();
+		System.out.println(board.toString());
+	}
 	
 }
