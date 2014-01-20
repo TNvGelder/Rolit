@@ -34,8 +34,10 @@ public class Board {
 	public Board(){
 		fields = new FieldType[ DIM ][ DIM ];
 		index = new FieldType[ DIM * DIM ];
-		for (int i = 0; i <64; i++) {
-			setField(i,FieldType.EMPTY);
+		for (int y = 0; y < DIM; y++) { //EERST DE Y
+			for (int x = 0; x < DIM; x++) { //DAN DE X
+				setField(x, y, FieldType.EMPTY);
+			}
 		}
 		setField( 3 , 3 , FieldType.RED);
 		setField( 4 , 3 , FieldType.YELLOW);
@@ -366,25 +368,25 @@ public class Board {
 	//toString
 	public String toString(){
 		String s = "";
-		for (int i = 0; i<DIM; i++){ // ga elke Y af
+		for (int y = 0; y < DIM; y++){ // ga elke Y af
 			String row = "|";
-            for (int j = 0; j < DIM; j++) { // ga elke X af
-            	if (getField(i,j)== FieldType.EMPTY ){
+            for (int x = 0; x < DIM; x++) { // ga elke X af
+            	if (getField(x,y)== FieldType.EMPTY ){
             		String number = "";
-            		if (toIndex(i,j)<10){
-            			number = "0" + toIndex(i,j);
+            		if (toIndex(x,y)<10){
+            			number = "0" + toIndex(x,y);
             		}
             		else {
-            			number = "" + toIndex(i,j);
+            			number = "" + toIndex(x,y);
             		}
             		row = row + " " + number + " |";
             	}
             	else {
             		String field = "    ";
-            		if (getField(i,j)==FieldType.RED){field = "RED ";}
-            		else if (getField(i,j)==FieldType.YELLOW){field = "YELL";}
-            		else if (getField(i,j)==FieldType.GREEN){field = "GREE";}
-            		else if (getField(i,j)==FieldType.BLUE){field = "BLUE";}
+            		if (getField(x,y)==FieldType.RED){field = "RED ";}
+            		else if (getField(x,y)==FieldType.YELLOW){field = "YELL";}
+            		else if (getField(x,y)==FieldType.GREEN){field = "GREE";}
+            		else if (getField(x,y)==FieldType.BLUE){field = "BLUE";}
             		row = row + field + "|";
             	}
             }
