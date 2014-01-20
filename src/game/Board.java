@@ -34,6 +34,9 @@ public class Board {
 	public Board(){
 		fields = new FieldType[ DIM ][ DIM ];
 		index = new FieldType[ DIM * DIM ];
+		for (int i = 0; i <64; i++) {
+			setField(i,FieldType.EMPTY);
+		}
 		setField( 3 , 3 , FieldType.RED);
 		setField( 4 , 3 , FieldType.YELLOW);
 		setField( 4 , 4 , FieldType.GREEN);
@@ -377,7 +380,7 @@ public class Board {
             		row = row + " " + number + " |";
             	}
             	else {
-            		String field = "";
+            		String field = "    ";
             		if (getField(i,j)==FieldType.RED){field = "RED ";}
             		else if (getField(i,j)==FieldType.YELLOW){field = "YELL";}
             		else if (getField(i,j)==FieldType.GREEN){field = "GREE";}
@@ -385,8 +388,10 @@ public class Board {
             		row = row + field + "|";
             	}
             }
+            s = s+ "\n" + SEPERATOR + "\n" + row;
             
         }
+		s = s + "\n" + SEPERATOR;
         return s;
      }
 	public static void main(String args[]){
