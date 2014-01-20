@@ -64,16 +64,14 @@ public class Board {
 	 * @param activeplayer
 	 * @param index
 	 */
-	public void move(int x, int y, FieldType activeplayer){		
-		if (isValid(x, y, activeplayer)){
-			setField(x, y, activeplayer);
-		};
-		// TO-DO notifyAll() ofzo?? Of iets anders van nextPlayer()?
-	} 							//1: isValid(), 2: setField() (,3: nextPlayer());
-	public void move(int index, FieldType activeplayer){
-		if (isValid(index, activeplayer)){
-			setField(index, activeplayer);
+	public void move(int x, int y, FieldType player){		
+		if (isValid(x, y, player)){
+			setField(x, y, player);
+			//TODO:turn every field mothafucka
 		}
+	}
+	public void move(int i, FieldType player){
+		move(toXCoord(i), toYCoord(i), player);
 	}
 	
 	/**
@@ -85,17 +83,17 @@ public class Board {
 	 */
 	public boolean isValid(int x, int y, FieldType player){
 		boolean result = false;
-		if( !isAdjacent(x, y)){
-			return false;
+		for (int i = 0; i< DIM*DIM ; i++){
+			if (isAdjacent(i) && isBeat(x, y, player)){
+				result = true;
+			}
 		}
-		else if (isBeat(x, y, player)){
+		
+		if( isAdjacent(x, y)){
 			result = true;
 		}
-		else {
-			result =  isAdjacent(x, y);
-		}
-		return result;
-	} //1: isAdjacent() 2: FieldType;
+		return result; 
+	}
 	public boolean isValid(int i, FieldType player){
 		return isValid(toXCoord(i), toYCoord(i), player);
 	}
@@ -113,15 +111,10 @@ public class Board {
 	 */
 	public void setField(int x, int y, FieldType color){
 		fields[x][y] = color;
-		if (getField(x,y)!=color){
-			setField(toIndex(x, y), color);
-		}
+		index[toIndex(x,y)] = color;
 	}
 	public void setField(int i, FieldType color){
-		index[i] = color;
-		if (getField(i)!=color){
-			setField(toXCoord(i), toYCoord(i), color);
-		}
+		setField(toXCoord(i), toYCoord(i), color);
 	}
 	
 	/**
@@ -153,22 +146,28 @@ public class Board {
 	 * @return boolean True if adjacent, False if not :-)
 	 */
 	public boolean isAdjacent(int x, int y){
-		return isAdjacent(toIndex(x, y));
+		boolean result = false;
+		for(int i = x-1; i<=x+1; i++){
+			for(int j = y-1; j<=y+1; j++){
+				if(i>=0 && i<DIM && j>=0 && j<DIM && !(i==x && j==y)){
+					result |= !isEmpty(x,y);
+				}
+			}
+		}
+		return result;
 	}
 	public boolean isAdjacent(int i){
-		if(	   !isEmpty(i-9) || !isEmpty(i-8) || !isEmpty(i-7) 
-			|| !isEmpty(i-1) 				  || !isEmpty(i+1) 
-			|| !isEmpty(i+7) || !isEmpty(i+8) || !isEmpty(i+9)
-			){
-			return true;
-		}
-		return false;
+		return isAdjacent(toXCoord(i), toYCoord(i));
 	}
 	
 	/**
 	 * Check if there is another field containing the same FieldType.
 	 * Requires that isEmpty(x,y)==true.
 	 */
+
+	public boolean isBeat(int i, FieldType player){
+		return isBeat(toXCoord(i), toYCoord(i), player);
+	}
 	public boolean isBeat(int x, int y, FieldType player){
 		//---------- Horizontal --------------------------------------------------//
 		if (x<6 && getField(x+1 ,y)!=FieldType.EMPTY && getField(x+1 ,y)!=player){
@@ -213,11 +212,11 @@ public class Board {
 		}
 			// --- Links-Onder ---//
 		if (x>1 && y<6 && getField(x-1, y+1) != FieldType.EMPTY && getField(x-1, y+1) != player){
-			for (int j = z+14; j>0; j=j+7){ if (getField(j)==player){return true;}}
+			for (int j = z+14; j<64; j=j+7){ if (getField(j)==player){return true;}}
 		}
 			// --- Rechts-Onder ---//
 		if (x<6 && y<6 && getField(x+1, y+1) != FieldType.EMPTY && getField(x+1, y+1) != player){
-			for (int j = z+18; j>0; j=j+9){ if (getField(j)==player){return true;}}
+			for (int j = z+18; j>0 && j< 64; j=j+9){ if (getField(j)==player){return true;}}
 		}
 		//------------------------------------------------------------------------//
 		return false;
@@ -339,24 +338,17 @@ public class Board {
 		
 	}
 	public int toXCoord(int index){
-		int x = 0;
-		x = index % 8;
-		return x; 
+		return index % 8;
 		
 		//TO-DO opvangen als -1 < index > 63;
 	}
 	public int toYCoord(int index){
-		int y = 0;
-		y = index / 8;
-		return y; 
+		return index / 8; 
 		
 		//TO-DO opvangen als -1 < index > 63;
 	}
 	//---------------------------------------------------------------------//
-	
-	
-	
-	
+		
 	/**
 	 * Check whether the board is full or not.
 	 * @return
@@ -398,6 +390,8 @@ public class Board {
      }
 	public static void main(String args[]){
 		Board board = new Board();
+		System.out.println(board.toString());
+		board.move(29, FieldType.RED);
 		System.out.println(board.toString());
 	}
 	
