@@ -448,6 +448,7 @@ public class Board {
 	public static void main(String args[]){
 		Board board = new Board();
 		System.out.println(board.toString());
+		board.move(26, FieldType.RED);// mag volgens de regels niet
 		board.move(31, FieldType.RED);// mag volgens de regels niet
 		board.move(29, FieldType.RED);
 		board.move(44, FieldType.YELLOW);
