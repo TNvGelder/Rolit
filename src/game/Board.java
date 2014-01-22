@@ -7,7 +7,7 @@ import game.FieldType;
 
 /**
  * Klasse die het speelbord beschrijft van Rolit.
- * @author Casper
+ * @author Casper & Twan
  * @version $Revision: 0.9 $
  */
 public class Board {
@@ -18,6 +18,11 @@ public class Board {
 
     private static final String SEPERATOR = INDEXING[0];
     private static final String WHITESPACE = "    ";
+    
+    int redFields = 0;
+    int yellowFields = 0;
+    int blueFields = 0;
+    int greenFields = 0;
 
 	
 	// -- Instance variables ---------------------------------------------------------//
@@ -43,6 +48,44 @@ public class Board {
 		setField( 4 , 3 , FieldType.YELLOW);
 		setField( 4 , 4 , FieldType.GREEN);
 		setField( 3 , 4 , FieldType.BLUE);
+		setField(6, 3, FieldType.GREEN); //Kleine test, 31 zou nu niet mogen met domove, maar volgens je method is het valid.
+	}
+	
+	
+	public int getClrCount(FieldType colour){
+		if (colour == FieldType.RED){
+			return redFields;
+		}
+		if (colour == FieldType.YELLOW){
+			return yellowFields;
+		}
+		if (colour == FieldType.GREEN){
+			return greenFields;
+		}
+		if (colour == FieldType.BLUE){
+			return blueFields;
+		}
+		else{
+			return (DIM*DIM - redFields - yellowFields - greenFields - blueFields);
+		}
+	}
+	
+	public void changeClrCount(int number, FieldType colour){
+		if (colour == FieldType.EMPTY){
+			return;
+		}
+		if (colour == FieldType.RED){
+			redFields = redFields + number;
+		}
+		if (colour == FieldType.YELLOW){
+			yellowFields = yellowFields + number;
+		}
+		if (colour == FieldType.GREEN){
+			greenFields = greenFields + number;
+		}
+		if (colour == FieldType.BLUE){
+			blueFields = blueFields + number;
+		}
 	}
 	
 	/**
@@ -81,18 +124,16 @@ public class Board {
 	 * @param i		(converts to coordinates, then excecutes with coordinates)
 	 * @return boolean Whether the move is legal (true) or not (false).
 	 */
-	public boolean isValid(int x, int y, FieldType player){
-		boolean result = false;
+	public boolean isValid(int x, int y, FieldType playerColour){
+		if (getClrCount(playerColour) == 0 && isAdjacent(x,y)){
+			return true;
+		}
 		for (int i = 0; i< DIM*DIM ; i++){
-			if (isAdjacent(i) && isBeat(x, y, player)){
-				result = true;
+			if (isAdjacent(i) && (Beat(x, y, playerColour) != 1)){
+				return true;
 			}
 		}
-		
-		if( isAdjacent(x, y)){
-			result = true;
-		}
-		return result; 
+		return false;
 	}
 	public boolean isValid(int i, FieldType player){
 		return isValid(toXCoord(i), toYCoord(i), player);
@@ -110,6 +151,9 @@ public class Board {
 	 * @param color
 	 */
 	public void setField(int x, int y, FieldType color){
+		FieldType oldColour = getField(x,y);
+		changeClrCount(-1, oldColour);
+		changeClrCount(1, color);
 		fields[x][y] = color;
 		index[toIndex(x,y)] = color;
 	}
@@ -165,124 +209,130 @@ public class Board {
 	 * Requires that isEmpty(x,y)==true.
 	 */
 
-	public boolean isBeat(int i, FieldType player){
-		return isBeat(toXCoord(i), toYCoord(i), player);
+	public int Beat(int i, FieldType playerColour){
+		return Beat(toXCoord(i), toYCoord(i), playerColour);
 	}
-	public boolean isBeat(int x, int y, FieldType player){
+	public int Beat(int x, int y, FieldType playerColour){
+		int startCount = getClrCount(playerColour);
+		
 		//---------- Horizontal --------------------------------------------------//
-		if (x<6 && getField(x+1 ,y)!=FieldType.EMPTY && getField(x+1 ,y)!=player){
-			for (int i=x+2; i<8; i++){
-				if (getField(i,y)==player){
-					return true;
+		if (x<6 && getField(x+1 ,y)!=playerColour){
+			for (int i=x+1; i<8; i++){
+				if (getField(i,y) == FieldType.EMPTY){
+					i = 8;
+				}
+				if (i < 8 && getField(i,y)==playerColour){
+					for (int i2 = x; i2 < i; i2++ ){
+						setField(i2, y, playerColour);
+					}
+					i = 8;
 				}
 			}
 		}
-		if (x>1 && getField(x-1 ,y)!=FieldType.EMPTY && getField(x-1 ,y)!=player){
-			for (int i=x-2; i>0; i--){
-				if (getField(i,y)==player){
-					return true;
+		if (x>1 && getField(x-1 ,y)!=playerColour){
+			for (int i=x-1; i>=0; i--){
+				if (getField(i,y) == FieldType.EMPTY){
+					i = -1;
+				}
+				if (i > -1 && getField(i,y) == playerColour){
+					for (int i2 = x; i2 > i; i2--){
+						setField(i2, y, playerColour);
+					}
+					i = -1;
 				}
 			}
 		}
+		
 		//---------- Vertical ----------------------------------------------------//
-		if (y<6 && getField(x, y+1)!=FieldType.EMPTY && getField(x, y+1)!=player){
-			for (int i=y+2; i<8; i++){
-				if (getField(x,i)==player){
-					return true;
+		if (y<6 && getField(x ,y+1)!=playerColour){
+			for (int i=y+1; i<8; i++){
+				if (getField(x,i) == FieldType.EMPTY){
+					i = 8;
+				}
+				if (i < 8 && getField(x, i)==playerColour){
+					for (int i2 = y; i2 < i; i2++ ){
+						setField(x, i2, playerColour);
+					}
+					i = 8;
 				}
 			}
 		}
-		if (y>1 && getField(x, y-1)!=FieldType.EMPTY && getField(x, y-1)!=player){
-			for (int i=y-2; i>0; i--){
-				if (getField(x,i)==player){
-					return true;
+
+		if (y>1 && getField(x ,y-1)!=playerColour){
+			for (int i=y-1; i>=0; i--){
+				if (getField(x,i) == FieldType.EMPTY){
+					i = -1;
+				}
+				if (i > -1 && getField(x,i) == playerColour){
+					for (int i2 = y; i2 > i; i2--){
+						setField(x, i2, playerColour);
+					}
+					i = -1;
 				}
 			}
 		}
+
 		//---------- Diagonal ----------------------------------------------------//
 		int z = toIndex(x,y);
 		
 			// --- Links-Boven ---//
-		if (x>1 && y>1 && getField(x-1, y-1)!=FieldType.EMPTY && getField(x-1,y-1)!=player){	
-			for (int j = z-18; j>0; j=j-9){ if (getField(j)==player){return true;}}
+		if (x>1 && y>1 && getField(x-1,y-1)!=playerColour){	
+			for (int j = z-9; j>=0; j=j-9){
+				if (getField(j) == FieldType.EMPTY){
+					j = -1;
+				}
+				if (j >= 0 && getField(j)==playerColour){
+					for (int j2 = z; j2 > j; j2 = j2 - 9){
+						setField(j2, playerColour);
+					}
+					j = -1;
+				}
+			}
 		}
 			// --- Rechts-Boven ---//
-		if (x<6 && y>1 && getField(x+1, y-1) != FieldType.EMPTY && getField(x+1, y-1) != player){
-			for (int j = z-14; j>0; j=j-7){ if (getField(j)==player){return true;}}
+		if (x<6 && y>1 && getField(x+1, y-1) != playerColour){
+			for (int j = z-7; j>=0; j=j-7){
+				if (getField(j) == FieldType.EMPTY){
+					j = -1;
+				}
+				if (j >= 0 && getField(j)==playerColour){
+					for(int j2 = z; j2 > j; j2 = j2 - 7){
+						setField(j2, playerColour);
+					}
+					j = -1;
+				}
+			}
 		}
 			// --- Links-Onder ---//
-		if (x>1 && y<6 && getField(x-1, y+1) != FieldType.EMPTY && getField(x-1, y+1) != player){
-			for (int j = z+14; j<64; j=j+7){ if (getField(j)==player){return true;}}
+		if (x>1 && y<6 && getField(x-1, y+1) != playerColour){
+			for (int j = z+7; j<=63; j=j+7){
+				if (getField(j) == FieldType.EMPTY){
+					j = 64;
+				}
+				if (j <= 63 && getField(j)==playerColour){
+					for(int j2 = z; j2 < j; j2 = j2+7){
+						setField(j2,playerColour);
+					}
+					j = 63;
+				}
+			}
 		}
 			// --- Rechts-Onder ---//
-		if (x<6 && y<6 && getField(x+1, y+1) != FieldType.EMPTY && getField(x+1, y+1) != player){
-			for (int j = z+18; j>0 && j< 64; j=j+9){ if (getField(j)==player){return true;}}
+		if (x<6 && y<6 && getField(x+1, y+1) != playerColour){
+			for (int j = z+9; j>= 64; j=j+9){
+				if (getField(j) == FieldType.EMPTY){
+					j = 64;
+				}
+				if (j <= 63 && getField(j)==playerColour){
+					for(int j2 = z; j2 < j; j2 = j2+7){
+						
+					}
+				}
+			}
 		}
 		//------------------------------------------------------------------------//
-		return false;
+		return (getClrCount(playerColour) - startCount + 1);
 		
-	}
-
-	/**
-	 * Turn the fields while doing a valid move.
-	 * @param i
-	 * @param player
-	 */
-	public void turnFields(int i, FieldType player){
-		turnFields(toXCoord(i), toYCoord(i), player);
-	}
-	
-	public void turnFields(int x, int y, FieldType player){
-	//---------- Horizontal --------------------------------------------------//
-		if (x<6 && getField(x+1 ,y)!=FieldType.EMPTY && getField(x+1 ,y)!=player){
-			for (int i=x+2; i<8; i++){
-				if (getField(i,y)!=player){
-					setField(i,y, player);
-				}
-			}
-		}
-		if (x>1 && getField(x-1 ,y)!=FieldType.EMPTY && getField(x-1 ,y)!=player){
-			for (int i=x-2; i>0; i--){
-				if (getField(i,y)!=player){
-					setField(i,y, player);
-				}
-			}
-		}
-	//---------- Vertical ----------------------------------------------------//
-		if (y<6 && getField(x, y+1)!=FieldType.EMPTY && getField(x, y+1)!=player){
-			for (int i=y+2; i<8; i++){
-				if (getField(x,i)!=player){
-					setField(x,i, player);
-				}
-			}
-		}
-		if (y>1 && getField(x, y-1)!=FieldType.EMPTY && getField(x, y-1)!=player){
-			for (int i=y-2; i>0; i--){
-				if (getField(x,i)!=player){
-					setField(x,i, player);
-				}
-			}
-		}
-	//---------- Diagonal ----------------------------------------------------//
-		int z = toIndex(x,y);
-		
-			// --- Links-Boven ---//
-		if (x>1 && y>1 && getField(x-1, y-1)!=FieldType.EMPTY && getField(x-1,y-1)!=player){	
-			for (int j = z-18; j>0; j=j-9){ if (getField(j)!=player){setField(j, player);}}
-		}
-			// --- Rechts-Boven ---//
-		if (x<6 && y>1 && getField(x+1, y-1) != FieldType.EMPTY && getField(x+1, y-1) != player){
-			for (int j = z-14; j>0; j=j-7){ if (getField(j)!=player){setField(j, player);}}
-		}
-			// --- Links-Onder ---//
-		if (x>1 && y<6 && getField(x-1, y+1) != FieldType.EMPTY && getField(x-1, y+1) != player){
-			for (int j = z+14; j>0; j=j+7){ if (getField(j)!=player){setField(j, player);}}
-		}
-			// --- Rechts-Onder ---//
-		if (x<6 && y<6 && getField(x+1, y+1) != FieldType.EMPTY && getField(x+1, y+1) != player){
-			for (int j = z+18; j>0; j=j+9){ if (getField(j)!=player){setField(j, player);}}
-		}
-		//------------------------------------------------------------------------//
 	}
 
 
@@ -391,7 +441,9 @@ public class Board {
 	public static void main(String args[]){
 		Board board = new Board();
 		System.out.println(board.toString());
+		board.move(31, FieldType.RED);// mag volgens de regels niet
 		board.move(29, FieldType.RED);
+		board.move(44, FieldType.YELLOW);
 		System.out.println(board.toString());
 	}
 	
