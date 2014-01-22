@@ -51,7 +51,9 @@ public class Board {
 		setField(6, 3, FieldType.GREEN); //Kleine test, 31 zou nu niet mogen met domove, maar volgens je method is het valid.
 	}
 	
-	
+	/**
+	 * @returns the ammount of fields with FieldType colour
+	 */
 	public int getClrCount(FieldType colour){
 		if (colour == FieldType.RED){
 			return redFields;
@@ -70,6 +72,9 @@ public class Board {
 		}
 	}
 	
+	/**
+	 * adds number to redFields, yellowFields, greenFields or blueFields.
+	 */
 	public void changeClrCount(int number, FieldType colour){
 		if (colour == FieldType.EMPTY){
 			return;
@@ -194,7 +199,7 @@ public class Board {
 		for(int i = x-1; i<=x+1; i++){
 			for(int j = y-1; j<=y+1; j++){
 				if(i>=0 && i<DIM && j>=0 && j<DIM && !(i==x && j==y)){
-					result |= !isEmpty(x,y);
+					result |= !isEmpty(i,j);
 				}
 			}
 		}
@@ -205,8 +210,10 @@ public class Board {
 	}
 	
 	/**
-	 * Check if there is another field containing the same FieldType.
+	 * Beats all possible enemy colours near (x,y).
 	 * Requires that isEmpty(x,y)==true.
+	 * returns the gain of the move. If gain == 1 the beat is not valid and the board won't change.
+	 * @return (getClrCount(playerColour) - startCount + 1);
 	 */
 
 	public int Beat(int i, FieldType playerColour){
@@ -352,18 +359,18 @@ public class Board {
 	}
 	
 	/**
-	 * Use the list of indices of empty fields and check for every index whether it's valid or not.
-	 * @param player
+	 * Use the list of indices of empty fields and check for every index whether it's adjacent or not.
 	 * @return
 	 */
-	public List<Integer> getValidList(FieldType player){
+	public List<Integer> getAdjacentList(){
 		List<Integer> list = getEmptyFields();
+		List<Integer> adjacentList = new ArrayList<Integer>();
 		for (int i=0; i<list.size(); i++){
-			if (isValid(list.get(i),player)){
-				list.add(i);
+			if (isAdjacent(list.get(i))){
+				adjacentList.add(i);
 			}
 		}
-		return list;
+		return adjacentList;
 	}
 	
 	public boolean isFull(){
