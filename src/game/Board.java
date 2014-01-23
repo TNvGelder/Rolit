@@ -338,23 +338,25 @@ public class Board {
 						}
 						gainCount++;
 					}
-					j = 63;
+					j = 64;
 				}
 			}
 		}
+
 			// --- Rechts-Onder ---//
 		if (x<6 && y<6 && getField(x+1, y+1) != playerColour){
-			for (int j = z+9; j>= 64; j=j+9){
+			for (int j = z+9; j<= 63; j=j+9){
 				if (getField(j) == FieldType.EMPTY){
 					j = 64;
 				}
 				if (j <= 63 && getField(j)==playerColour){
-					for(int j2 = z; j2 < j; j2 = j2+7){
+					for(int j2 = z; j2 < j; j2 = j2+9){
 						if (allowSetField){
 							setField(j2, playerColour);	
 						}
 						gainCount++;
 					}
+					j = 64;
 				}
 			}
 		}
