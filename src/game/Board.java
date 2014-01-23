@@ -48,7 +48,6 @@ public class Board {
 		setField( 4 , 3 , FieldType.YELLOW);
 		setField( 4 , 4 , FieldType.GREEN);
 		setField( 3 , 4 , FieldType.BLUE);
-		setField(6, 3, FieldType.GREEN); //Kleine test, 31 zou nu niet mogen met domove, maar volgens je method is het valid.
 	}
 	
 	/**

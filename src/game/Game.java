@@ -9,18 +9,23 @@ import java.util.Set;
 public class Game {
 	
 	Set<Player> waiters = new HashSet<Player>();
-	List<Player> players;
-	Board gameBoard;
+	List<Player> players = new ArrayList<Player>();
+	Board gameBoard = new Board();
 	public Game(){
-		Board board = new Board();
 	}
 	
 	public void add(Player player){
-		players.add(player);
+		waiters.add(player);
+	}
+	public void doMove(int position, FieldType clr){
+		gameBoard.move(position, clr);
+	}
+	public void remove(Player player){
+		waiters.remove(player);
 	}
 	
-	public void remove(Player player){
-		players.remove(player);
+	public Board getBoard(){
+		return gameBoard.copyBoard();
 	}
 	
 	public void startGame(){
@@ -31,19 +36,37 @@ public class Game {
 		Iterator<Player> wait = waiters.iterator();
 		for (int i = 0; i < waiters.size(); i++){
 			Player nxtPlay = wait.next();
-			players.set(i, nxtPlay);
+			players.add(nxtPlay);
 			System.out.println(nxtPlay.getName() + " joined.");
 		}
 		if (players.size() == 2){
-			
+			players.get(0).setColour(FieldType.RED);
+			players.get(1).setColour(FieldType.GREEN);
 		}
-		players.get(0).setColour(FieldType.RED);
-		players.get(1).setColour(FieldType.GREEN);
-		if (players.get(2) != null){
-			players.get(2).setColour(FieldType.YELLOW);	
+		if (players.size() >= 3){
+			players.get(0).setColour(FieldType.RED);
+			players.get(1).setColour(FieldType.YELLOW);
+			players.get(2).setColour(FieldType.GREEN);
 		}
-		if (players.get(3) != null){
-			players.get(3).setColour(FieldType.BLUE);	
+		if (players.size() == 4){
+			players.get(3).setColour(FieldType.BLUE);
+		}
+		int i = 0;
+		while (i < players.size()){
+			doMove(players.get(i).giveMove(),players.get(i).getColor());
+			if (gameBoard.isFull()){
+				System.out.println("Red: " + gameBoard.getClrCount(FieldType.RED));
+				System.out.println("Yellow: " + gameBoard.getClrCount(FieldType.YELLOW));
+				System.out.println("Green: " + gameBoard.getClrCount(FieldType.GREEN));
+				System.out.println("Blue: " + gameBoard.getClrCount(FieldType.BLUE));
+				i = 9001;
+			}
+			if (i==players.size() -1){
+				i = 0;
+			}
+			else{
+				i++;
+			}
 		}
 		
 	}

@@ -1,19 +1,13 @@
 package game;
 
-public class Player {
+public interface Player {
 	
 	//Instance variables
-	private String playerName;
-	private FieldType color;
-	
-	// Constructor
-	/**
-	 * creates a new Player. The playername should be given as argument.
-	 * @param name
-	 */
-	public Player(String name){
-		playerName = name;
-	}
+
+
+
+	public void setGame(Game g);
+	public int giveMove();
 	
 	//Commands
 	/**
@@ -21,14 +15,8 @@ public class Player {
 	 * The color will be determined in class Game, depending on the ammount of players in the game.
 	 * @param newColour
 	 */
-	public void setColour(FieldType newColour){
-		color = newColour;
-	}
+	public void setColour(FieldType newColour);
 	
-	//@requires color != null;
-	public void doMove(Board board, int fieldIndex){
-		board.move(fieldIndex, color);
-	}
 	
 	//Queries
 	
@@ -36,15 +24,11 @@ public class Player {
 	 * Returns the name of the player.
 	 * @return playerName
 	 */
-	public String getName(){
-		return playerName;
-	}
+	public String getName();
 	/**
 	 * Returns the color of the player.
 	 * @return color
 	 */
-	public FieldType getColor(){
-		return color;
-	}
+	public FieldType getColor();
 
 }
