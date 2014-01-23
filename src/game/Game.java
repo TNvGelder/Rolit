@@ -37,6 +37,7 @@ public class Game {
 		for (int i = 0; i < waiters.size(); i++){
 			Player nxtPlay = wait.next();
 			players.add(nxtPlay);
+			nxtPlay.setGame(this);
 			System.out.println(nxtPlay.getName() + " joined.");
 		}
 		if (players.size() == 2){
@@ -54,6 +55,7 @@ public class Game {
 		int i = 0;
 		while (i < players.size()){
 			doMove(players.get(i).giveMove(),players.get(i).getColor());
+			System.out.println(gameBoard.toString());
 			if (gameBoard.isFull()){
 				System.out.println("Red: " + gameBoard.getClrCount(FieldType.RED));
 				System.out.println("Yellow: " + gameBoard.getClrCount(FieldType.YELLOW));

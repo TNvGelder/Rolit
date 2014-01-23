@@ -1,6 +1,7 @@
 package game;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import game.FieldType;
@@ -114,6 +115,7 @@ public class Board {
 	public void move(int x, int y, FieldType player){		
 		if (isValid(x, y, player)){
 			setField(x, y, player);
+			beat(x,y,player,true);
 			//Als valid move is, zijn ook de stenen al gezet.
 		}
 	}
@@ -132,10 +134,8 @@ public class Board {
 		if (getClrCount(playerColour) == 0 && isAdjacent(x,y)){
 			return true;
 		}
-		for (int i = 0; i< DIM*DIM ; i++){
-			if (isAdjacent(i) && (beat(x, y, playerColour) != 1)){
-				return true;
-			}
+		if (isAdjacent(x,y) && (beat(x, y, playerColour,false) != 1)){
+			return true;
 		}
 		return false;
 	}
@@ -215,12 +215,11 @@ public class Board {
 	 * @return (getClrCount(playerColour) - startCount + 1);
 	 */
 
-	public int beat(int i, FieldType playerColour){
-		return beat(toXCoord(i), toYCoord(i), playerColour);
+	public int beat(int i, FieldType playerColour, boolean allowSetField){
+		return beat(toXCoord(i), toYCoord(i), playerColour, allowSetField);
 	}
-	public int beat(int x, int y, FieldType playerColour){
-		int startCount = getClrCount(playerColour);
-		
+	public int beat(int x, int y, FieldType playerColour,boolean allowSetField){
+		int gainCount = 1;
 		//---------- Horizontal --------------------------------------------------//
 		if (x<6 && getField(x+1 ,y)!=playerColour){
 			for (int i=x+1; i<8; i++){
@@ -229,7 +228,10 @@ public class Board {
 				}
 				if (i < 8 && getField(i,y)==playerColour){
 					for (int i2 = x; i2 < i; i2++ ){
-						setField(i2, y, playerColour);
+						if (allowSetField){
+							setField(i2, y, playerColour);	
+						}
+						gainCount++;
 					}
 					i = 8;
 				}
@@ -242,13 +244,15 @@ public class Board {
 				}
 				if (i > -1 && getField(i,y) == playerColour){
 					for (int i2 = x; i2 > i; i2--){
-						setField(i2, y, playerColour);
+						if (allowSetField){
+							setField(i2, y, playerColour);	
+						}
+						gainCount++;
 					}
 					i = -1;
 				}
 			}
 		}
-		
 		//---------- Vertical ----------------------------------------------------//
 		if (y<6 && getField(x ,y+1)!=playerColour){
 			for (int i=y+1; i<8; i++){
@@ -257,7 +261,10 @@ public class Board {
 				}
 				if (i < 8 && getField(x, i)==playerColour){
 					for (int i2 = y; i2 < i; i2++ ){
-						setField(x, i2, playerColour);
+						if (allowSetField){
+							setField(x, i2, playerColour);	
+						}
+						gainCount++;
 					}
 					i = 8;
 				}
@@ -271,7 +278,10 @@ public class Board {
 				}
 				if (i > -1 && getField(x,i) == playerColour){
 					for (int i2 = y; i2 > i; i2--){
-						setField(x, i2, playerColour);
+						if (allowSetField){
+							setField(x, i2, playerColour);	
+						}
+						gainCount++;
 					}
 					i = -1;
 				}
@@ -289,7 +299,10 @@ public class Board {
 				}
 				if (j >= 0 && getField(j)==playerColour){
 					for (int j2 = z; j2 > j; j2 = j2 - 9){
-						setField(j2, playerColour);
+						if (allowSetField){
+							setField(j2, playerColour);	
+						}
+						gainCount++;
 					}
 					j = -1;
 				}
@@ -303,7 +316,10 @@ public class Board {
 				}
 				if (j >= 0 && getField(j)==playerColour){
 					for(int j2 = z; j2 > j; j2 = j2 - 7){
-						setField(j2, playerColour);
+						if (allowSetField){
+							setField(j2, playerColour);	
+						}
+						gainCount++;
 					}
 					j = -1;
 				}
@@ -317,7 +333,10 @@ public class Board {
 				}
 				if (j <= 63 && getField(j)==playerColour){
 					for(int j2 = z; j2 < j; j2 = j2+7){
-						setField(j2,playerColour);
+						if (allowSetField){
+							setField(j2, playerColour);	
+						}
+						gainCount++;
 					}
 					j = 63;
 				}
@@ -331,13 +350,16 @@ public class Board {
 				}
 				if (j <= 63 && getField(j)==playerColour){
 					for(int j2 = z; j2 < j; j2 = j2+7){
-						
+						if (allowSetField){
+							setField(j2, playerColour);	
+						}
+						gainCount++;
 					}
 				}
 			}
 		}
 		//------------------------------------------------------------------------//
-		return (getClrCount(playerColour) - startCount + 1);
+		return gainCount;
 		
 	}
 
@@ -361,15 +383,17 @@ public class Board {
 	 * Use the list of indices of empty fields and check for every index whether it's adjacent or not.
 	 * @return
 	 */
-	public List<Integer> getAdjacentList(){
+	public List<Integer> getValidList(FieldType colour){
 		List<Integer> list = getEmptyFields();
-		List<Integer> adjacentList = new ArrayList<Integer>();
-		for (int i=0; i<list.size(); i++){
-			if (isAdjacent(list.get(i))){
-				adjacentList.add(i);
+		List<Integer> validList = new ArrayList<Integer>();
+		Iterator<Integer> emptyIterate = list.iterator();
+		while (emptyIterate.hasNext()){
+			int nxtField = emptyIterate.next();
+			if (isValid(nxtField,colour)){
+				validList.add(nxtField);
 			}
 		}
-		return adjacentList;
+		return validList;
 	}
 	
 	public boolean isFull(){

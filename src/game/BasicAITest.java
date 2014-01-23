@@ -9,6 +9,7 @@ public class BasicAITest {
 	static Player p4 = new BasicAI("Computer4");
 	
 	public static void main(String[] args){
+
 		testGame.add(p1);
 		testGame.add(p2);
 		testGame.add(p3);

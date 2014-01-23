@@ -1,5 +1,6 @@
 package game;
 
+import java.util.Iterator;
 import java.util.List;
 
 public class BasicAI implements Player{
@@ -23,20 +24,23 @@ public class BasicAI implements Player{
 		int bestMove = -1;
 		int bestGain = 0;
 		Board gameBoard = game.getBoard();
-		List <Integer> adjList = gameBoard.getAdjacentList();
-		int i = 0;
-		while (i < adjList.size()){
+		List <Integer> validList = gameBoard.getValidList(myColour);
+		System.out.println(validList.toString());
+		Iterator<Integer> moveIterator = validList.iterator();
+		while (moveIterator.hasNext()){
+			int tryoutIndex = moveIterator.next();
 			Board tryoutBoard = game.getBoard();
-			int gain = tryBeat(tryoutBoard, i);
-			while (gain == 1){
-				i++;
-				gain = tryBeat(tryoutBoard, i);
+			int gain = tryBeat(tryoutBoard, tryoutIndex);
+			while (gain == 1 && moveIterator.hasNext()){
+				tryoutIndex = moveIterator.next();
+				gain = tryBeat(tryoutBoard, tryoutIndex);
 			}
 			if (gain > bestGain){
 				bestGain = gain;
-				bestMove = i;
+				bestMove = tryoutIndex;
 			}
 		}
+		System.out.println(myColour + " chooses index " + bestMove);
 		return bestMove;
 	}
 
@@ -47,7 +51,7 @@ public class BasicAI implements Player{
 	}
 
 	public int tryBeat(Board board, int fieldIndex) {
-		return board.beat(fieldIndex, myColour);
+		return board.beat(fieldIndex, myColour, false);
 		
 	}
 
