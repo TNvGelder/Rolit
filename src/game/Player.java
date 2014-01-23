@@ -1,34 +1,39 @@
 package game;
 
-public interface Player {
+public abstract class Player {
 	
 	//Instance variables
-
-
-
-	public void setGame(Game g);
-	public int giveMove();
+	private String name;
+	private FieldType color;
 	
-	//Commands
-	/**
-	 * Changes the player's color.
-	 * The color will be determined in class Game, depending on the ammount of players in the game.
-	 * @param newColour
-	 */
-	public void setColour(FieldType newColour);
-	
-	
+	public Player (String name, FieldType color){
+		this.name = name;
+		this.color = color;
+	}
+
 	//Queries
 	
 	/**
 	 * Returns the name of the player.
 	 * @return playerName
 	 */
-	public String getName();
+	public String getName(){
+		return name;
+	}
+	
 	/**
 	 * Returns the color of the player.
 	 * @return color
 	 */
-	public FieldType getColor();
+	public FieldType getColor(){
+		return color;
+	}
 
+	/**
+	 * Get the move that is to be made.
+	 * @param board
+	 * @return
+	 */
+	public abstract int getMove(Board board);
+	
 }

@@ -3,27 +3,21 @@ package game;
 import java.util.Iterator;
 import java.util.List;
 
-public class BasicAI implements Player{
+public class BasicAI extends Player{
 
 	private String name;
 	private FieldType myColour;
 	private Game game;
 	
-	public BasicAI(String name){
-		this.name = name;
+	public BasicAI(String name, FieldType color){
+		super(name, color);
 	}
 	
 	@Override
-	public void setGame(Game g) {
-		this.game = g;
-		
-	}
-
-	@Override
-	public int giveMove() {
+	public int getMove(Board board) {
 		int bestMove = -1;
 		int bestGain = 0;
-		Board gameBoard = game.getBoard();
+		Board gameBoard = board;
 		List <Integer> validList = gameBoard.getValidList(myColour);
 		System.out.println(validList.toString());
 		Iterator<Integer> moveIterator = validList.iterator();
@@ -44,26 +38,11 @@ public class BasicAI implements Player{
 		return bestMove;
 	}
 
-	@Override
-	public void setColour(FieldType newColour) {
-		myColour = newColour;
-		
-	}
-
 	public int tryBeat(Board board, int fieldIndex) {
 		return board.beat(fieldIndex, myColour, false);
 		
 	}
 
-	@Override
-	public String getName() {
-		return name;
-	}
-
-	@Override
-	public FieldType getColor() {
-		return myColour;
-	}
 
 
 }
