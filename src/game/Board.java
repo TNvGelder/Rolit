@@ -131,16 +131,10 @@ public class Board {
 	 * @return boolean Whether the move is legal (true) or not (false).
 	 */
 	public boolean isValid(int x, int y, FieldType playerColour){
-		if (getClrCount(playerColour) == 0 && isAdjacent(x,y)){
-			return true;
-		}
-		if (isAdjacent(x,y) && (beat(x, y, playerColour,false) != 1)){
-			return true;
-		}
-		return false;
+		return isValid(toIndex(x,y), playerColour);
 	}
-	public boolean isValid(int i, FieldType player){
-		return isValid(toXCoord(i), toYCoord(i), player);
+	public boolean isValid(int i, FieldType playerColour){
+		return (getValidList(playerColour).contains(i));
 	}
 	
 	//--- ------------------------------------------------------------------------//
@@ -390,9 +384,18 @@ public class Board {
 		List<Integer> validList = new ArrayList<Integer>();
 		Iterator<Integer> emptyIterate = list.iterator();
 		while (emptyIterate.hasNext()){
-			int nxtField = emptyIterate.next();
-			if (isValid(nxtField,colour)){
-				validList.add(nxtField);
+			int move = emptyIterate.next();
+			if(isAdjacent(move) && (beat(move,colour,false) != 1)){
+				validList.add(move);
+			}
+		}
+		if (validList.size() == 0){
+			emptyIterate = list.iterator();
+			while (emptyIterate.hasNext()){
+				int move = emptyIterate.next();
+				if (isAdjacent(move)){
+					validList.add(move);
+				}
 			}
 		}
 		return validList;
