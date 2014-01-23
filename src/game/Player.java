@@ -4,8 +4,7 @@ public class Player {
 	
 	//Instance variables
 	private String playerName;
-	
-	FieldType colour;
+	private FieldType color;
 	
 	// Constructor
 	/**
@@ -18,17 +17,17 @@ public class Player {
 	
 	//Commands
 	/**
-	 * Changes the player's colour.
-	 * The colour will be determined in class Game, depending on the ammount of players in the game.
+	 * Changes the player's color.
+	 * The color will be determined in class Game, depending on the ammount of players in the game.
 	 * @param newColour
 	 */
 	public void setColour(FieldType newColour){
-		colour = newColour;
+		color = newColour;
 	}
 	
-	//@requires colour != null;
+	//@requires color != null;
 	public void doMove(Board board, int fieldIndex){
-		board.move(fieldIndex, colour);
+		board.move(fieldIndex, color);
 	}
 	
 	//Queries
@@ -39,6 +38,13 @@ public class Player {
 	 */
 	public String getName(){
 		return playerName;
+	}
+	/**
+	 * Returns the color of the player.
+	 * @return color
+	 */
+	public FieldType getColor(){
+		return color;
 	}
 
 }

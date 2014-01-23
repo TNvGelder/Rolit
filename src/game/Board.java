@@ -115,7 +115,7 @@ public class Board {
 	public void move(int x, int y, FieldType player){		
 		if (isValid(x, y, player)){
 			setField(x, y, player);
-			//TODO:turn every field mothafucka
+			//Als valid move is, zijn ook de stenen al gezet.
 		}
 	}
 	public void move(int i, FieldType player){
@@ -134,7 +134,7 @@ public class Board {
 			return true;
 		}
 		for (int i = 0; i< DIM*DIM ; i++){
-			if (isAdjacent(i) && (Beat(x, y, playerColour) != 1)){
+			if (isAdjacent(i) && (beat(x, y, playerColour) != 1)){
 				return true;
 			}
 		}
@@ -216,10 +216,10 @@ public class Board {
 	 * @return (getClrCount(playerColour) - startCount + 1);
 	 */
 
-	public int Beat(int i, FieldType playerColour){
-		return Beat(toXCoord(i), toYCoord(i), playerColour);
+	public int beat(int i, FieldType playerColour){
+		return beat(toXCoord(i), toYCoord(i), playerColour);
 	}
-	public int Beat(int x, int y, FieldType playerColour){
+	public int beat(int x, int y, FieldType playerColour){
 		int startCount = getClrCount(playerColour);
 		
 		//---------- Horizontal --------------------------------------------------//
