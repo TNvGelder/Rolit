@@ -115,9 +115,11 @@ public class Server extends Thread{
 	}
 	
 	public void leaveGame(ClientHandler handler){
+		//TODO: destroy game, disconnect client.
 	}
 	
 	public void createGame(String name, int players){
+		Game newgame = new Game(gamecounter);
 	}
 	
 	public synchronized void shutdown() {

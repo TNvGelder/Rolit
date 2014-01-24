@@ -8,27 +8,36 @@ import java.util.Observable;
 import java.util.Set;
 
 import Server.ClientHandler;
+import Server.Server;
 
 public class Game extends Observable {
 	
 	private int gameID;
-	private Set<ClientHandler> waiters = new HashSet<ClientHandler>();
-	private List<ClientHandler> players = new ArrayList<ClientHandler>();
+	private int players;
+	private List<ClientHandler> playerlist = new ArrayList<ClientHandler>();
 	private Board board;
-	private FieldType current;
+	private FieldType current = FieldType.RED;
 	
 	public Game(int id){
 		gameID = id;
 	}
 	
 	public void add(ClientHandler player){
-		waiters.add(player);
+		playerlist.add(player);
 	}
 	public void remove(ClientHandler player){
-		waiters.remove(player);
+		playerlist.remove(player);
 	}
 	public void doMove(int position, FieldType color){
 		board.move(position, color);
+	}
+	
+	public int getGameNumber(){
+		return gameID;
+	}
+	
+	public FieldType getCurrent(){
+		return current;
 	}
 	
 	public Board getBoard(){
@@ -39,10 +48,59 @@ public class Game extends Observable {
 	 * Start this game: create a board and keep things updated.
 	 */
 	public void startGame(){
-		if (waiters.size()<2) {
+		if (playerlist.size()<2 || playerlist.size()>4) {
+			//TODO: Error: verkeerd aantal spelers.
 			
 		}
+		if (playerlist.size()==2){
+			playerlist.get(0).addPlayer(FieldType.RED);
+			playerlist.get(1).addPlayer(FieldType.YELLOW);
+			players = 2;
+
+			while (!board.isFull()){
+				doMove(playerlist.get(nextPlayer()-1).getMove(), current);
+			}
+		}
+		if (playerlist.size()==3){
+			playerlist.get(0).addPlayer(FieldType.RED);
+			playerlist.get(1).addPlayer(FieldType.YELLOW);
+			playerlist.get(2).addPlayer(FieldType.GREEN);
+			players = 3;
+			
+
+			while (!board.isFull()){
+				doMove(playerlist.get(nextPlayer()-1).getMove(), current);
+			}		
+		}
+
+		if (playerlist.size()==4){
+			playerlist.get(0).addPlayer(FieldType.RED);
+			playerlist.get(1).addPlayer(FieldType.YELLOW);
+			playerlist.get(2).addPlayer(FieldType.GREEN);
+			playerlist.get(3).addPlayer(FieldType.BLUE);
+			players = 4;
+			
+
+			while (!board.isFull()){
+				doMove(playerlist.get(nextPlayer()-1).getMove(), current);
+			}
 		
+		}
+		
+		Server.messageAll("game ended");
+		//TODO: exit gracefully;
+		
+	}
+
+	private int nextPlayer() {
+		if (current.ordinal()>players || current.ordinal()==0){
+			current = FieldType.values()[1];
+			return 2;
+		}
+		else {
+			current = FieldType.values()[(current.ordinal()+1)];
+			return current.ordinal();
+		}
 	}
 	
 

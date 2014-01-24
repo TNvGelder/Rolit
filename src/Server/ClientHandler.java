@@ -1,5 +1,7 @@
 package Server;
 
+import game.FieldType;
+
 import java.io.*;
 import java.net.*;
 
@@ -73,6 +75,18 @@ public class ClientHandler extends Thread {
 	
 	public int getGameNumber(){
 		return gameNumber;
+	}
+
+
+	public void addPlayer(FieldType color) {
+		// TODO add a player, human (or AI)
+		
+	}
+
+
+	public int getMove() {
+		// TODO Get move from the client.
+		return 0;
 	}
 
 }
