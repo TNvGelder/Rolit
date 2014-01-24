@@ -203,10 +203,11 @@ public class Board {
 	}
 	
 	/**
-	 * Beats all possible enemy colours near (x,y).
+	 * Checks if there's a beat possible for field (x,y) if there is no possible beat the number 1 is returned
+	 * , when allowSetField is true the beaten enemyfields will also get the given playercolour.
+	 * In all cases, when the returned gain == 1 the board will not change.
 	 * Requires that isEmpty(x,y)==true.
-	 * returns the gain of the move. If gain == 1 the beat is not valid and the board won't change.
-	 * @return (getClrCount(playerColour) - startCount + 1);
+	 * @return gainCount
 	 */
 
 	public int beat(int i, FieldType playerColour, boolean allowSetField){
