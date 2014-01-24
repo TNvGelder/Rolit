@@ -1,4 +1,4 @@
-package rolit.server;
+package Server;
 
 import java.io.*;
 import java.net.*;
@@ -13,16 +13,54 @@ public class ClientHandler extends Thread {
 	private String          clientName = "[clientName]";
 
 	public ClientHandler(Server server, Socket sock) throws IOException {
+		this.server = server;
+		this.sock = sock;
+		out = new BufferedWriter(new OutputStreamWriter(sock.getOutputStream()));
+		in = new BufferedReader(new InputStreamReader(sock.getInputStream()));
 	}
 	
 	
 	public void run() {
+		//TODO: a lot
+		try {
+			while (true){
+		
+			//TODO: run program, listen to input
+			String input = in.readLine();
+			//TODO: seperate commands using protocol
+			}
+		}
+		catch (IOException e){
+			shutdown();
+		}
 	}
 
+	/**
+	 * Zend een message naar de client.
+	 * @param msg De message voor de client
+	 */
 	public synchronized void sendMessage(String msg) {
+		try {
+			out.write(msg + "\n");
+			out.flush();
+		} catch (IOException e) {
+			shutdown();
+		}
 	}
 	
+	/**
+	 * Sluit de ClientHandler op een nette manier en licht de Server hierover in.
+	 */
 	public synchronized void shutdown() {
+		server.removeHandler(this);
+		server.serverUpdate(clientName + " shut down.");
+		try {
+			sock.close();
+			in.close();
+			out.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public String getClientName(){
