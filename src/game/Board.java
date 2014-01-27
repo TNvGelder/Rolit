@@ -106,6 +106,14 @@ public class Board {
 	}
 	
 	/**
+	 * Get the dimensions of this board.
+	 * @return DIM
+	 */
+	public int getDim(){
+		return DIM;
+	}
+	
+	/**
 	 * Standard method for in-game moves. Checks whether the move is valid, then proceeds with game.
 	 * @param x
 	 * @param y

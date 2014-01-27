@@ -50,8 +50,7 @@ public class Server extends Thread{
 				sc.start();
 				serverGUI.update("Sock accepted");
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					System.out.println(e);
 				}
 		}
 	}

@@ -24,8 +24,16 @@ public class Client extends Thread implements Observer{
 	}
 	
 	public void run(){
-		//TODO:??
+		//TODO:Maak serverhandler en voer het uit.
 		
+	}
+	
+	public void setPlayer(Player playertype){
+		player = playertype;
+	}
+	
+	public Player getPlayer(){
+		return player;
 	}
 	
 	public String getClientName(){

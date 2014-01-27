@@ -108,5 +108,21 @@ public class Game extends Observable {
 	public void update(){
 		
 	}
+	
+	public int[] getScore(){
+		int red = 0;
+		int yellow = 0;
+		int green = 0;
+		int blue = 0;
+		for (int i=0; i<(board.getDim()^2); i++){
+			if (board.getField(i)==FieldType.RED){++red;}
+			else if (board.getField(i)==FieldType.YELLOW){++yellow;}
+			else if (board.getField(i)==FieldType.GREEN){++green;}
+			else if (board.getField(i)==FieldType.BLUE){++blue;}
+		}
+		int[] score = {red, yellow, green, blue};
+		return score; 
+		
+	}
 
 }

@@ -175,7 +175,7 @@ public class ServerGUI extends JFrame implements ActionListener {
 		}
         server.start();
 
-        addMessage("Started listening on port " + port + "...");
+        addMessage("Connectie op poort: " + port);
     }
 
     /** Voegt een bericht toe aan de TextArea op het frame. */
