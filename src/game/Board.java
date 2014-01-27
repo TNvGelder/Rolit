@@ -118,6 +118,7 @@ public class Board {
 			beat(x,y,player,true);
 			//Als valid move is, zijn ook de stenen al gezet.
 		}
+		else System.out.println("Error: invalid move");
 	}
 	public void move(int i, FieldType player){
 		move(toXCoord(i), toYCoord(i), player);

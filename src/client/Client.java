@@ -1,5 +1,7 @@
 package client;
 
+import game.*;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -14,9 +16,15 @@ public class Client extends Thread implements Observer{
     private BufferedReader		in;
     private BufferedWriter		out;
 	private ClientGUI			clientGui;
-	private boolean 			connect = true;
+	private Player 				player;
+	
+	public Client(){
+		//TODO: stuff ;maak serverhandler-> doe communicatie met server; 
+		run();
+	}
 	
 	public void run(){
+		//TODO:??
 		
 	}
 	
@@ -40,7 +48,7 @@ public class Client extends Thread implements Observer{
 				out.write(msg + "\n");
 				out.flush();
 			} catch (IOException e) {
-				System.out.println("Shutdown failed");
+				System.out.println("Failed to send message");
 			}
 		}
 	}

@@ -20,6 +20,7 @@ public class Game extends Observable {
 	
 	public Game(int id){
 		gameID = id;
+		board = new Board();
 	}
 	
 	public void add(ClientHandler player){
@@ -30,6 +31,7 @@ public class Game extends Observable {
 	}
 	public void doMove(int position, FieldType color){
 		board.move(position, color);
+		System.out.println("\n" + board.toString()+ "\n");
 	}
 	
 	public int getGameNumber(){
@@ -87,7 +89,7 @@ public class Game extends Observable {
 		
 		}
 		
-		Server.messageAll("game ended");
+		System.out.println("game over");
 		//TODO: exit gracefully;
 		
 	}
@@ -103,5 +105,8 @@ public class Game extends Observable {
 		}
 	}
 	
+	public void update(){
+		
+	}
 
 }
