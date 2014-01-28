@@ -32,6 +32,10 @@ public class Game extends Observable {
 	public void doMove(int position, FieldType color){
 		board.move(position, color);
 		System.out.println("\n" + board.toString()+ "\n");
+		setChanged();
+		if (board.getValidList(color).contains(position)){
+			notifyObservers(position);	
+		}
 	}
 	
 	public int getGameNumber(){

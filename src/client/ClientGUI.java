@@ -15,7 +15,7 @@ import javax.swing.JPanel;
 import javax.swing.border.Border;
 
 
-public class ClientGUI extends JFrame implements ActionListener, Observer{
+public class ClientGUI extends JFrame implements Observer{
 	private static final int DIM = 8;
 	private Container c = getContentPane();
 	private JPanel boardPanel = new JPanel();
@@ -30,17 +30,17 @@ public class ClientGUI extends JFrame implements ActionListener, Observer{
 	}
 
 	public void init(){
+		Border boardLine = BorderFactory.createLineBorder(Color.black);
 		for (int i = 0; i < DIM*DIM; i++){
-			Border boardLine = BorderFactory.createLineBorder(Color.black);
 			
 			JButton fieldButton = new JButton();
 			buttonArray[i] = fieldButton;
 			boardPanel.add(buttonArray[i]);
-			boardPanel.setLayout(new GridLayout(DIM, DIM));
-			boardPanel.setBorder(boardLine);
-			boardPanel.setPreferredSize(new Dimension(boardSize,boardSize));
-			c.add(boardPanel);
 		}
+		boardPanel.setLayout(new GridLayout(DIM, DIM));
+		boardPanel.setBorder(boardLine);
+		boardPanel.setPreferredSize(new Dimension(boardSize,boardSize));
+		c.add(boardPanel);
 		setLayout(new FlowLayout());
 		setSize(boardSize*2,boardSize*2);
 		c.setMinimumSize(new Dimension(boardSize,boardSize));
@@ -54,14 +54,21 @@ public class ClientGUI extends JFrame implements ActionListener, Observer{
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
+	public void update(Observable o, Object arg) {
 		// TODO Auto-generated method stub
 		
 	}
-
-	@Override
-	public void update(Observable o, Object arg) {
-		// TODO Auto-generated method stub
+	
+	public class RolitController implements ActionListener{
+		private Game model;
+		public RolitController(Game g){
+			model = g;
+		}
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
 		
 	}
 }
