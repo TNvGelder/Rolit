@@ -110,7 +110,7 @@ public class Game extends Observable {
 	}
 	
 	public void update(){
-		
+		//TODO: update the board with the new move
 	}
 	
 	public int[] getScore(){

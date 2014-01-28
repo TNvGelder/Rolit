@@ -13,6 +13,7 @@ import java.util.Observer;
 public class Client extends Thread implements Observer{
     private String				name;
     private Socket				sock;
+    private ServerHandler		serverhandler;
     private BufferedReader		in;
     private BufferedWriter		out;
 	private ClientGUI			clientGui;
@@ -24,6 +25,7 @@ public class Client extends Thread implements Observer{
 	}
 	
 	public void run(){
+		
 		//TODO:Maak serverhandler en voer het uit.
 		
 	}

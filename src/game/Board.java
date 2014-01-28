@@ -106,8 +106,7 @@ public class Board {
 	}
 	
 	/**
-	 * Get the dimensions of this board.
-	 * @return DIM
+	 * Get the DIM.
 	 */
 	public int getDim(){
 		return DIM;
@@ -483,6 +482,7 @@ public class Board {
 		s = s + "\n" + SEPERATOR;
         return s;
      }
+	/*
 	public static void main(String args[]){
 		Board board = new Board();
 		System.out.println(board.toString());
@@ -492,5 +492,6 @@ public class Board {
 		board.move(44, FieldType.YELLOW);
 		System.out.println(board.toString());
 	}
+	*/
 	
 }

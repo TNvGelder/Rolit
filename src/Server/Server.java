@@ -21,8 +21,9 @@ public class Server extends Thread{
 	  * @throws IOException 
 	  */
 	
-	public Server(int port) throws IOException {
+	public Server(int port, ServerGUI serverGUI) throws IOException {
 		this.port = port;
+		this.serverGUI = serverGUI;
 		clients = new ArrayList<ClientHandler>();
 		try {
 			serversocket = new ServerSocket(port);
@@ -52,6 +53,7 @@ public class Server extends Thread{
 				} catch (IOException e) {
 					System.out.println(e);
 				}
+				//TODO:Put the new clienthandler in a game.
 		}
 	}
 
@@ -83,6 +85,10 @@ public class Server extends Thread{
 		}
 	}
 	
+	/**
+	 * Send message to server only.
+	 * @param msg
+	 */
 	public void serverUpdate(String msg){
 		serverGUI.update(msg);
 	}
@@ -121,13 +127,14 @@ public class Server extends Thread{
 		Game newgame = new Game(gamecounter);
 	}
 	
-	public synchronized void shutdown() {
-		messageAll("error You have been disconnected from the server");
-		try {
-			serversocket.close();
-			System.exit(-1);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+	public void startGame(int id){
+		games[id].startGame();
+	}
+	
+	public void shutdown() {
+		this.messageAll("Shutting down server...");
+        try {
+            this.serversocket.close();
+        } catch (Exception e) { }
 	}
 }

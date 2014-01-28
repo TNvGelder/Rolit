@@ -13,6 +13,7 @@ public class ClientHandler extends Thread {
 	private BufferedReader  in;
 	private BufferedWriter  out;
 	private String          clientName = "[clientName]";
+	private boolean			handshaked = false;
 
 	public ClientHandler(Server server, Socket sock) throws IOException {
 		this.server = server;
