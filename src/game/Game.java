@@ -29,6 +29,12 @@ public class Game extends Observable {
 	public void remove(ClientHandler player){
 		playerlist.remove(player);
 	}
+	
+	/**
+	 * Execute given move.
+	 * @param position
+	 * @param color
+	 */
 	public void doMove(int position, FieldType color){
 		board.move(position, color);
 		System.out.println("\n" + board.toString()+ "\n");
@@ -38,14 +44,34 @@ public class Game extends Observable {
 		}
 	}
 	
+	/**
+	 * Return playerlist.
+	 * @return
+	 */
+	public List<ClientHandler> getPlayerList(){
+		return playerlist;
+	}
+	
+	/**
+	 * Return this gameID.
+	 * @return
+	 */
 	public int getGameNumber(){
 		return gameID;
 	}
 	
+	/**
+	 * Returns current player.
+	 * @return
+	 */
 	public FieldType getCurrent(){
 		return current;
 	}
 	
+	/**
+	 * Return the board that is played on.
+	 * @return
+	 */
 	public Board getBoard(){
 		return board;
 	}
@@ -59,8 +85,8 @@ public class Game extends Observable {
 			
 		}
 		if (playerlist.size()==2){
-			playerlist.get(0).addPlayer(FieldType.RED);
-			playerlist.get(1).addPlayer(FieldType.YELLOW);
+			playerlist.get(0).setPlayer(FieldType.RED);
+			playerlist.get(1).setPlayer(FieldType.YELLOW);
 			players = 2;
 
 			while (!board.isFull()){
@@ -68,9 +94,9 @@ public class Game extends Observable {
 			}
 		}
 		if (playerlist.size()==3){
-			playerlist.get(0).addPlayer(FieldType.RED);
-			playerlist.get(1).addPlayer(FieldType.YELLOW);
-			playerlist.get(2).addPlayer(FieldType.GREEN);
+			playerlist.get(0).setPlayer(FieldType.RED);
+			playerlist.get(1).setPlayer(FieldType.YELLOW);
+			playerlist.get(2).setPlayer(FieldType.GREEN);
 			players = 3;
 			
 
@@ -80,10 +106,10 @@ public class Game extends Observable {
 		}
 
 		if (playerlist.size()==4){
-			playerlist.get(0).addPlayer(FieldType.RED);
-			playerlist.get(1).addPlayer(FieldType.YELLOW);
-			playerlist.get(2).addPlayer(FieldType.GREEN);
-			playerlist.get(3).addPlayer(FieldType.BLUE);
+			playerlist.get(0).setPlayer(FieldType.RED);
+			playerlist.get(1).setPlayer(FieldType.YELLOW);
+			playerlist.get(2).setPlayer(FieldType.GREEN);
+			playerlist.get(3).setPlayer(FieldType.BLUE);
 			players = 4;
 			
 
@@ -97,7 +123,11 @@ public class Game extends Observable {
 		//TODO: exit gracefully;
 		
 	}
-
+	
+	/**
+	 * Current = current+1
+	 * @return
+	 */
 	private int nextPlayer() {
 		if (current.ordinal()>players || current.ordinal()==0){
 			current = FieldType.values()[1];
@@ -110,7 +140,7 @@ public class Game extends Observable {
 	}
 	
 	public void update(){
-		//TODO: update the board with the new move
+		//TODO: update the board with the new move.
 	}
 	
 	public int[] getScore(){

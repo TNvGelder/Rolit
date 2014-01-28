@@ -30,6 +30,14 @@ public class ClientHandler extends Thread {
 		
 			//TODO: run program, listen to input
 			String input = in.readLine();
+			
+			if(input.startsWith("support") && handshaked){
+				sendMessage("support");
+			}
+			if(input.startsWith("support") && handshaked){
+				sendMessage("support");
+			}
+			
 			//TODO: seperate commands using protocol
 			}
 		}
@@ -79,7 +87,7 @@ public class ClientHandler extends Thread {
 	}
 
 
-	public void addPlayer(FieldType color) {
+	public void setPlayer(FieldType color) {
 		// TODO add a player, human (or AI)
 		
 	}

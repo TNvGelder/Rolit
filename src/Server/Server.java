@@ -9,12 +9,11 @@ import game.Game;
 public class Server extends Thread{
 	private int port;
 	private Collection<ClientHandler> clients;
-	private boolean error;
 	private ServerSocket serversocket;
 	public ServerGUI serverGUI;
-	private List<String> availableplayers = new ArrayList<String>();
+	//[If lobby is wanted] private List<String> availableplayers = new ArrayList<String>();
 	private int gamecounter = 0;
-	public Game[] games = new Game[20];
+	public Game[] games = new Game[100];
 
 	/**  
 	  * Construct a server with a port. Make a collection of clienthandlers possible. 
@@ -47,13 +46,20 @@ public class Server extends Thread{
 				try {
 					sock = serversocket.accept();
 				
-				ClientHandler sc = new ClientHandler(this, sock);
-				sc.start();
-				serverGUI.update("Sock accepted");
+					ClientHandler sc = new ClientHandler(this, sock);
+					sc.start();
+					serverGUI.update("Sock accepted");
+					// Put handler in game;
+					while (sc.getGameNumber()==-1){
+						int i = 0;
+						if (games[i].getPlayerList().size()<4){
+							games[i].add(sc);
+							sc.setGameNumber(i);
+						}
+					}
 				} catch (IOException e) {
 					System.out.println(e);
 				}
-				//TODO:Put the new clienthandler in a game.
 		}
 	}
 
