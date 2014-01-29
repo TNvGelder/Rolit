@@ -5,7 +5,10 @@ import game.*;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.net.InetAddress;
 import java.net.Socket;
 import java.util.Observable;
 import java.util.Observer;
@@ -19,8 +22,17 @@ public class Client extends Thread implements Observer{
 	private ClientGUI			clientGui;
 	private Player 				player;
 	
-	public Client(){
-		//TODO: stuff ;maak serverhandler-> doe communicatie met server; 
+	public Client(String name, InetAddress address, int port, String kindOfPlayer){
+		//TODO: stuff ;maak serverhandler-> doe communicatie met server;
+		name = name;
+		try {
+			sock = new Socket(address, port);
+			out = new BufferedWriter(new OutputStreamWriter(sock.getOutputStream()));
+			in = new BufferedReader(new InputStreamReader(sock.getInputStream()));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		run();
 	}
 	
