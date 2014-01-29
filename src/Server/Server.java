@@ -140,18 +140,13 @@ public class Server extends Thread{
 		messageAll("Client " + handler.getName() + " has left the game");
 	}
 	
-<<<<<<< Updated upstream
-	public void createGame(String creator, int players){
-		games[gamecounter] = new Game(gamecounter, players);
-		lobby.remove(lobby.indexOf(creator));
-=======
 	public void createGame(String name, int players){
 		if (games[gamecounter] != null){
 			++gamecounter;
 		}
 			games[gamecounter] = new Game(gamecounter);
 			lobby.remove(lobby.indexOf(name));
->>>>>>> Stashed changes
+
 	}
 	
 	public void joinGame(ClientHandler client, int gameID){
