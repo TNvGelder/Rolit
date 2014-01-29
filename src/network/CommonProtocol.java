@@ -1,4 +1,4 @@
-package rolit.model.networking.common;
+package network;
 
 import java.io.*;
 import java.security.*;

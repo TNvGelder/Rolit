@@ -5,43 +5,45 @@ import game.FieldType;
 import java.io.*;
 import java.net.*;
 
+import network.ServerProtocol;
+
 public class ClientHandler extends Thread {
 
-	private Server          server;
+	public Server          server;
 	private Socket          sock;
 	private int				gameNumber = -1;
 	private BufferedReader  in;
 	private BufferedWriter  out;
 	private String          clientName = "[clientName]";
 	private boolean			handshaked = false;
+	private boolean 		active = true;
+	private ServerProtocol  protocol;
+	public ClientInformation clientInfo;
 
 	public ClientHandler(Server server, Socket sock) throws IOException {
 		this.server = server;
 		this.sock = sock;
 		out = new BufferedWriter(new OutputStreamWriter(sock.getOutputStream()));
 		in = new BufferedReader(new InputStreamReader(sock.getInputStream()));
+		server.serverUpdate("Client connected to the server");
 	}
 	
 	
 	public void run() {
-		//TODO: a lot
+		// TODO: a lot
 		try {
-			while (true){
-		
-			//TODO: run program, listen to input
-			String input = in.readLine();
-			
-			if(input.startsWith("support") && handshaked){
-				sendMessage("support");
+			while (active) {
+				String msg = in.readLine();
+				if (protocol.isValidCommand(msg)) {
+					try {
+						protocol.doCommand(msg);
+					} catch (IllegalArgumentException e) {
+						server.serverUpdate("Illegal arguments" + msg);
+					}
+				}
 			}
-			if(input.startsWith("support") && handshaked){
-				sendMessage("support");
-			}
-			
-			//TODO: seperate commands using protocol
-			}
-		}
-		catch (IOException e){
+
+		} catch (IOException e) {
 			shutdown();
 		}
 	}
@@ -96,6 +98,12 @@ public class ClientHandler extends Thread {
 	public int getMove() {
 		// TODO Get move from the client.
 		return 0;
+	}
+
+
+	public void sendCommand(String handshake, String[] strings) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

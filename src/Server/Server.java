@@ -7,13 +7,13 @@ import java.util.*;
 import game.Game;
 
 public class Server extends Thread{
-	private int port;
-	private Collection<ClientHandler> clients;
-	private ServerSocket serversocket;
-	public ServerGUI serverGUI;
-	//[If lobby is wanted] private List<String> availableplayers = new ArrayList<String>();
-	private int gamecounter = 0;
-	public Game[] games = new Game[100];
+	private int 						port;
+	private Collection<ClientHandler> 	clients;
+	private ServerSocket 				serversocket;
+	public ServerGUI 					serverGUI;
+	private List<ClientHandler> 		lobby 				= new ArrayList<ClientHandler>();
+	private int 						gamecounter = 0;
+	public Game[] 						games 				= new Game[100];
 
 	/**  
 	  * Construct a server with a port. Make a collection of clienthandlers possible. 
@@ -47,18 +47,20 @@ public class Server extends Thread{
 					sock = serversocket.accept();
 				
 					ClientHandler sc = new ClientHandler(this, sock);
+					serverGUI.update("Clienthandler created");
 					sc.start();
-					serverGUI.update("Sock accepted");
-					// Put handler in game;
+					/* Put handler in waitinglist;
 					while (sc.getGameNumber()==-1){
 						int i = 0;
 						if (games[i].getPlayerList().size()<4){
 							games[i].add(sc);
 							sc.setGameNumber(i);
 						}
-					}
+						i++;
+					}*/
+					lobby.add(sc);
 				} catch (IOException e) {
-					System.out.println(e);
+					serverUpdate("Something went wrong: " + e.getMessage());
 				}
 		}
 	}
@@ -131,6 +133,11 @@ public class Server extends Thread{
 	
 	public void createGame(String name, int players){
 		Game newgame = new Game(gamecounter);
+		lobby.remove(lobby.indexOf(name));
+	}
+	
+	public void joinGame(ClientHandler client, int gameID){
+		games[gameID].add(name);
 	}
 	
 	public void startGame(int id){
@@ -142,5 +149,10 @@ public class Server extends Thread{
         try {
             this.serversocket.close();
         } catch (Exception e) { }
+	}
+
+	public boolean hasClient(String clientName) {
+		// TODO is clientName already in use?
+		return false;
 	}
 }
