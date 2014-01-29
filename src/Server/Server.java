@@ -17,7 +17,7 @@ public class Server extends Thread{
 	public ServerInformation			serverInfo;
 
 	/**  
-	  * Construct a server with a port. Make a collection of clienthandlers possible. 
+	  * De constructor start server en luistert op de aangegeven poort. Ook linkt hij de server met zijn GUI. 
 	  * @throws IOException 
 	  */
 	
@@ -49,9 +49,12 @@ public class Server extends Thread{
 				try {
 					sock = serversocket.accept();
 				
-					ClientHandler sc = new ClientHandler(this, sock);
+					ClientHandler client = new ClientHandler(this, sock);
 					serverGUI.update("Clienthandler created");
-					sc.start();
+					client.start();
+					lobby.add(client);
+					serverGUI.update(lobby.get(0).getName());
+					this.messageAll("test");
 					/* Put handler in waitinglist;
 					while (sc.getGameNumber()==-1){
 						int i = 0;
@@ -61,7 +64,7 @@ public class Server extends Thread{
 						}
 						i++;
 					}*/
-					lobby.add(sc);
+					lobby.add(client);
 				} catch (IOException e) {
 					serverUpdate("Something went wrong: " + e.getMessage());
 				}
@@ -73,7 +76,7 @@ public class Server extends Thread{
 	 * naar alle aangesloten Clients.
 	 * @param msg bericht dat verstuurd wordt
 	 */
-	public synchronized void messageAll(String msg) {
+	public void messageAll(String msg) {
 		serverGUI.update(msg);
 		for(Iterator<ClientHandler> iterator = clients.iterator(); iterator.hasNext();){
 			((ClientHandler) iterator.next()).sendMessage(msg);
@@ -151,6 +154,7 @@ public class Server extends Thread{
 	
 	public void joinGame(ClientHandler client, int gameID){
 		games[gameID].add(client);
+		lobby.remove(client);
 	}
 	
 	public void startGame(int id){
@@ -165,8 +169,14 @@ public class Server extends Thread{
 	}
 
 	public boolean hasClient(String clientName) {
+		boolean result = false;
+		for (ClientHandler it : clients){
+			if (it.getClientName().equals(clientName)){
+				result = true;
+			}
+		}
 		// TODO is clientName already in use?
-		return false;
+		return result;
 	}
 
 	public ClientHandler getClient(String name) {

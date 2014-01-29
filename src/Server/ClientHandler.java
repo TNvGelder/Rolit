@@ -54,7 +54,7 @@ public class ClientHandler extends Thread {
 	 * Zend een message naar de client.
 	 * @param msg De message voor de client
 	 */
-	public synchronized void sendMessage(String msg) {
+	public void sendMessage(String msg) {
 		try {
 			out.write(msg + "\n");
 			out.flush();
