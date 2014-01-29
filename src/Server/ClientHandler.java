@@ -9,7 +9,7 @@ import network.ServerProtocol;
 
 public class ClientHandler extends Thread {
 
-	public Server          server;
+	public Server          	server;
 	private Socket          sock;
 	private int				gameNumber = -1;
 	private BufferedReader  in;
@@ -18,7 +18,9 @@ public class ClientHandler extends Thread {
 	private boolean			handshaked = false;
 	private boolean 		active = true;
 	private ServerProtocol  protocol;
+	private FieldType		fieldtype;
 	public ClientInformation clientInfo;
+	
 
 	public ClientHandler(Server server, Socket sock) throws IOException {
 		this.server = server;
@@ -90,7 +92,7 @@ public class ClientHandler extends Thread {
 
 
 	public void setPlayer(FieldType color) {
-		// TODO add a player, human (or AI)
+		fieldtype = color;
 		
 	}
 
@@ -104,6 +106,11 @@ public class ClientHandler extends Thread {
 	public void sendCommand(String handshake, String[] strings) {
 		// TODO Auto-generated method stub
 		
+	}
+
+
+	public FieldType getPlayer() {
+		return fieldtype;
 	}
 
 }

@@ -144,9 +144,21 @@ public class Game extends Observable {
 	 * Current.ordinal() = current.ordinal()+1
 	 * @return
 	 */
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
 	private int nextPlayer() {
 		
 		this.current = playerlist.current.ordinal()];
+=======
+	private void nextPlayer() {
+		
+		this.current = playerlist.get((current.ordinal() + 1) % playerlist.size()).getPlayer();
+>>>>>>> Stashed changes
+=======
+	private void nextPlayer() {
+		
+		this.current = playerlist.get((current.ordinal() + 1) % playerlist.size()).getPlayer();
+>>>>>>> Stashed changes
 		//TODO: 2 players meand red and green, NOT RED AND YELLOW.
 		/*if (current.ordinal()>players-1 || current.ordinal()==0){
 			current = FieldType.values()[1];
