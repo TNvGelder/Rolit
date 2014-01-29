@@ -14,6 +14,7 @@ public class Server extends Thread{
 	private List<ClientHandler> 		lobby 				= new ArrayList<ClientHandler>();
 	private int 						gamecounter = 0;
 	public Game[] 						games 				= new Game[100];
+	public ServerInformation			serverInfo;
 
 	/**  
 	  * Construct a server with a port. Make a collection of clienthandlers possible. 
@@ -31,6 +32,9 @@ public class Server extends Thread{
 		} catch (IllegalArgumentException e){
 			throw e;
 		}
+		
+		serverInfo = new ServerInformation();
+		
 	}
 
 	/**
@@ -137,7 +141,7 @@ public class Server extends Thread{
 	}
 	
 	public void joinGame(ClientHandler client, int gameID){
-		games[gameID].add(name);
+		games[gameID].add(client);
 	}
 	
 	public void startGame(int id){
@@ -154,5 +158,10 @@ public class Server extends Thread{
 	public boolean hasClient(String clientName) {
 		// TODO is clientName already in use?
 		return false;
+	}
+
+	public ClientHandler getClient(String name) {
+		// TODO return ClientHandler object from a string
+		return null;
 	}
 }

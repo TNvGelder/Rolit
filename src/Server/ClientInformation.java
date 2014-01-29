@@ -1,5 +1,7 @@
 package Server;
 
+import game.Game;
+
 public class ClientInformation {
 	
 	public String 		name;
@@ -9,4 +11,5 @@ public class ClientInformation {
     public boolean 		ownsGame = false;
 	public boolean 		hasGame = false;
 	public String 		version = "";
+	public Game 		Game;
 }

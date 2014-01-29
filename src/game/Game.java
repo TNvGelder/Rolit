@@ -17,6 +17,8 @@ public class Game extends Observable {
 	private List<ClientHandler> playerlist = new ArrayList<ClientHandler>();
 	private Board board;
 	private FieldType current = FieldType.RED;
+	public  ClientHandler ownerClient;
+	public  int status = 0;
 	
 	public Game(int id){
 		gameID = id;
@@ -157,6 +159,10 @@ public class Game extends Observable {
 		int[] score = {red, yellow, green, blue};
 		return score; 
 		
+	}
+
+	public int getPlayers() {
+		return players;
 	}
 
 }
