@@ -7,9 +7,9 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -17,29 +17,21 @@ public class Client extends Thread implements Observer{
     private String				name;
     private Socket				sock;
     private ServerHandler		serverhandler;
-    private BufferedReader		in;
-    private BufferedWriter		out;
 	private ClientGUI			clientGui;
 	private Player 				player;
+	private ClientProtocol		protocol;
 	
 	public Client(String name, InetAddress address, int port, String kindOfPlayer){
 		//TODO: stuff ;maak serverhandler-> doe communicatie met server;
-		name = name;
+		this.name = name;
 		try {
 			sock = new Socket(address, port);
-			out = new BufferedWriter(new OutputStreamWriter(sock.getOutputStream()));
-			in = new BufferedReader(new InputStreamReader(sock.getInputStream()));
+			serverhandler = new ServerHandler(this,sock);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		run();
-	}
-	
-	public void run(){
-		
-		//TODO:Maak serverhandler en voer het uit.
-		
+		serverhandler.run();
 	}
 	
 	public void setPlayer(Player playertype){
@@ -54,31 +46,20 @@ public class Client extends Thread implements Observer{
 		return name;
 	}
 	
-	public void shutdown(){
-		try{
-			in.close();
-			out.close();
-			sock.close();
-		}catch(IOException e){
-			System.out.println("Connection closed");
-		}
-	}
-	
-	public void sendMessage(String msg){
-		if (msg != null){
-			try {
-				out.write(msg + "\n");
-				out.flush();
-			} catch (IOException e) {
-				System.out.println("Failed to send message");
-			}
-		}
-	}
 
 	@Override
 	public void update(Observable o, Object arg) {
 		clientGui.update(o,arg);
 		
+	}
+	
+	public static void main(String[] args){
+		try {
+			new Client("testClient", InetAddress.getByName("130.89.178.217") ,2727, "noPlayer");
+		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 }

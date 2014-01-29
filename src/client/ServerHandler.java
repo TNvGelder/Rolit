@@ -12,6 +12,7 @@ public class ServerHandler extends Thread {
 	private BufferedReader  in;
 	private BufferedWriter  out;
 	private String          clientName = "[clientName]";
+	private boolean connected = true;
 
 	public ServerHandler(Client client, Socket sock) throws IOException {
 		this.client = client;
@@ -24,18 +25,38 @@ public class ServerHandler extends Thread {
 	public void run() {
 		//TODO: a lot
 		try {
-			while (true){
-		
-			//TODO: run program, listen to input
-			String input = in.readLine();
-			//TODO: seperate commands using protocol
+			while (connected){
+				String msg = in.readLine();
+				System.out.println(msg);
+				if (msg.startsWith("test")){
+					System.out.println("TestMessage received!");
+					sendMessage("test");
+				}
 			}
-		}
+		}	
 		catch (IOException e){
 			shutdown();
 		}
 	}
+	
+	public void sendMessage(String msg){
+		if (msg != null){
+			try {
+				out.write(msg + "\n");
+				out.flush();
+			} catch (IOException e) {
+				System.out.println("Failed to send message");
+			}
+		}
+	}
 
 	public synchronized void shutdown() {
+		connected = false;
+		try {
+			out.close();
+			in.close();
+		} catch (IOException e) {
+			System.out.println("Failed to close the in/output");
+		}
 	}
 }
