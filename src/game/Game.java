@@ -24,12 +24,26 @@ public class Game extends Observable {
 		gameID = id;
 		board = new Board();
 	}
+	public Game(int id, int players){
+		this(id);
+		this.players = players;
+	}
 	
 	public void add(ClientHandler player){
 		playerlist.add(player);
 	}
+	
+	/**
+	 * Remove player from the game. If the game was started, also remove the rest of the players.
+	 * @param player
+	 */
 	public void remove(ClientHandler player){
 		playerlist.remove(player);
+		if (status == 1 && playerlist.size()>0){
+			for (ClientHandler client : playerlist){
+				remove(client);
+			}
+		}
 	}
 	
 	/**
@@ -127,18 +141,21 @@ public class Game extends Observable {
 	}
 	
 	/**
-	 * Current = current+1
+	 * Current.ordinal() = current.ordinal()+1
 	 * @return
 	 */
 	private int nextPlayer() {
-		if (current.ordinal()>players || current.ordinal()==0){
+		
+		this.current = playerlist.current.ordinal()];
+		//TODO: 2 players meand red and green, NOT RED AND YELLOW.
+		/*if (current.ordinal()>players-1 || current.ordinal()==0){
 			current = FieldType.values()[1];
 			return 2;
 		}
 		else {
 			current = FieldType.values()[(current.ordinal()+1)];
 			return current.ordinal();
-		}
+		}*/
 	}
 	
 	public void update(){

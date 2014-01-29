@@ -33,7 +33,6 @@ public class Server extends Thread{
 			throw e;
 		}
 		
-		serverInfo = new ServerInformation();
 		
 	}
 
@@ -128,16 +127,22 @@ public class Server extends Thread{
 	 */
 	public synchronized void removeHandler(ClientHandler handler) {
 		clients.remove(handler);
-		leaveGame(handler);
+		handler.shutdown();
 	}
 	
+	/**
+	 * Verwijdert client uit game.
+	 * @param handler
+	 */
 	public void leaveGame(ClientHandler handler){
+		
 		//TODO: destroy game, disconnect client.
+		messageAll("Client " + handler.getName() + " has left the game");
 	}
 	
-	public void createGame(String name, int players){
-		Game newgame = new Game(gamecounter);
-		lobby.remove(lobby.indexOf(name));
+	public void createGame(String creator, int players){
+		games[gamecounter] = new Game(gamecounter, players);
+		lobby.remove(lobby.indexOf(creator));
 	}
 	
 	public void joinGame(ClientHandler client, int gameID){
