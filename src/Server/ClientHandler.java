@@ -36,6 +36,7 @@ public class ClientHandler extends Thread {
 		try {
 			while (active) {
 				String msg = in.readLine();
+				System.out.println(msg);
 				if (protocol.isValidCommand(msg)) {
 					try {
 						protocol.doCommand(msg);

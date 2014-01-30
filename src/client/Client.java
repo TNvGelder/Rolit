@@ -32,6 +32,9 @@ public class Client extends Thread implements Observer{
 			e.printStackTrace();
 		}
 		serverhandler.run();
+		if (kindOfPlayer == "Human"){
+			clientGui = new ClientGUI(500, serverhandler);
+		}
 	}
 	
 	public void setPlayer(Player playertype){
@@ -55,7 +58,7 @@ public class Client extends Thread implements Observer{
 	
 	public static void main(String[] args){
 		try {
-			new Client("testClient", InetAddress.getByName("130.89.178.217") ,2727, "noPlayer");
+			new Client("testClient", InetAddress.getLocalHost() ,2727, "Human");
 		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

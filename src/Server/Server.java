@@ -54,7 +54,6 @@ public class Server extends Thread{
 					client.start();
 					lobby.add(client);
 					serverGUI.update(lobby.get(0).getName());
-					this.messageAll("test");
 					/* Put handler in waitinglist;
 					while (sc.getGameNumber()==-1){
 						int i = 0;
@@ -64,7 +63,7 @@ public class Server extends Thread{
 						}
 						i++;
 					}*/
-					lobby.add(client);
+					this.messageAll("test");
 				} catch (IOException e) {
 					serverUpdate("Something went wrong: " + e.getMessage());
 				}
@@ -78,8 +77,11 @@ public class Server extends Thread{
 	 */
 	public void messageAll(String msg) {
 		serverGUI.update(msg);
-		for(Iterator<ClientHandler> iterator = clients.iterator(); iterator.hasNext();){
-			((ClientHandler) iterator.next()).sendMessage(msg);
+		Iterator<ClientHandler> iterator = lobby.iterator();
+		while(iterator.hasNext()){
+			ClientHandler receiver = iterator.next();
+			serverGUI.update("Sending message to " + receiver.getClientName());
+			receiver.sendMessage(msg);
 		}
 	}
 	

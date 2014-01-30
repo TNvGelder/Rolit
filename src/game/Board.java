@@ -431,12 +431,12 @@ public class Board {
 		//TO-DO opvangen als -1 < x > 8 || -1 < y > 8;
 		
 	}
-	public int toXCoord(int index){
+	public static int toXCoord(int index){
 		return index % 8;
 		
 		//TO-DO opvangen als -1 < index > 63;
 	}
-	public int toYCoord(int index){
+	public static int toYCoord(int index){
 		return index / 8; 
 		
 		//TO-DO opvangen als -1 < index > 63;

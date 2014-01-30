@@ -13,7 +13,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
-
+import game.Board;
 
 public class ClientGUI extends JFrame implements Observer{
 	private static final int DIM = 8;
@@ -22,11 +22,13 @@ public class ClientGUI extends JFrame implements Observer{
 	private JButton[] buttonArray = new JButton[DIM*DIM];
 	private JLabel turnInfo = new JLabel("Playername's turn");
 	private int boardSize;
+	private ServerHandler serverHandler;
 	
-	public ClientGUI(int size){
+	public ClientGUI(int size, ServerHandler servHandler){
 		super("Rolit Client");
 		boardSize = size;
 		init();
+		serverHandler = servHandler;
 	}
 
 	public void init(){
@@ -50,7 +52,7 @@ public class ClientGUI extends JFrame implements Observer{
 
 	
 	public static void main(String[] args){
-		ClientGUI test1 = new ClientGUI(500);
+
 	}
 
 	@Override
@@ -60,13 +62,22 @@ public class ClientGUI extends JFrame implements Observer{
 	}
 	
 	public class RolitController implements ActionListener{
-		private Game model;
-		public RolitController(Game g){
-			model = g;
+		private ServerHandler serverHandler;
+		public RolitController(ServerHandler servHandler){
+			serverHandler = servHandler;
+			for (int i = 0; i < 10; i++){
+				buttonArray[i].addActionListener(this);
+			}
 		}
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			// TODO Auto-generated method stub
+			JButton b = (JButton) e.getSource();
+			System.out.println(b.getName());
+			for (int i = 0; i < 10; i++){
+				if (buttonArray[i].equals(b)){
+					serverHandler.sendMessage("move " + Board.toXCoord(i) + " " + Board.toYCoord(i));
+				}
+			}
 			
 		}
 		
