@@ -29,6 +29,7 @@ public class ClientGUI extends JFrame implements Observer{
 		boardSize = size;
 		init();
 		serverHandler = servHandler;
+		RolitController testctrl1 = this.new RolitController(serverHandler);
 	}
 
 	public void init(){
@@ -49,11 +50,6 @@ public class ClientGUI extends JFrame implements Observer{
 		c.add(turnInfo);
 		setVisible(true);
 	}	
-
-	
-	public static void main(String[] args){
-
-	}
 
 	@Override
 	public void update(Observable o, Object arg) {

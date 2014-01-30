@@ -31,10 +31,10 @@ public class Client extends Thread implements Observer{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		serverhandler.run();
 		if (kindOfPlayer == "Human"){
 			clientGui = new ClientGUI(500, serverhandler);
 		}
+		serverhandler.run();
 	}
 	
 	public void setPlayer(Player playertype){

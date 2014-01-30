@@ -36,19 +36,27 @@ public class ClientHandler extends Thread {
 		try {
 			while (active) {
 				String msg = in.readLine();
-				System.out.println(msg);
-				if (protocol.isValidCommand(msg)) {
+				server.serverUpdate(msg);
+				if (msg == "test"){
+					server.serverUpdate("TestMessage received!");
+				}
+				
+				/* Does not work yet.
+				 * if (protocol.isValidCommand(msg)) {
+				 
 					try {
 						protocol.doCommand(msg);
 					} catch (IllegalArgumentException e) {
 						server.serverUpdate("Illegal arguments" + msg);
 					}
 				}
-			}
+			*/}
+			
 
 		} catch (IOException e) {
 			shutdown();
 		}
+		
 	}
 
 	/**

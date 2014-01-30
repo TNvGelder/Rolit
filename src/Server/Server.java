@@ -76,7 +76,7 @@ public class Server extends Thread{
 	 * @param msg bericht dat verstuurd wordt
 	 */
 	public void messageAll(String msg) {
-		serverGUI.update(msg);
+		serverGUI.update("Sending" + msg + "to all ClientHandlers");
 		Iterator<ClientHandler> iterator = lobby.iterator();
 		while(iterator.hasNext()){
 			ClientHandler receiver = iterator.next();
