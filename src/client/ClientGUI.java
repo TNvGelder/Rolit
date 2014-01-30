@@ -4,6 +4,8 @@ import game.Game;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -13,6 +15,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
+
 import game.Board;
 
 public class ClientGUI extends JFrame implements Observer{
@@ -30,6 +33,14 @@ public class ClientGUI extends JFrame implements Observer{
 		init();
 		serverHandler = servHandler;
 		RolitController testctrl1 = this.new RolitController(serverHandler);
+		addWindowListener(new WindowAdapter() {
+             public void windowClosing(WindowEvent e) {
+                 e.getWindow().dispose();
+             }
+             public void windowClosed(WindowEvent e) {
+                 System.exit(0);
+             }
+		 });
 	}
 
 	public void init(){

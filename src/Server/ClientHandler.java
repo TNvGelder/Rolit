@@ -99,7 +99,7 @@ public class ClientHandler extends Thread {
 	}
 
 
-	public void setPlayer(FieldType color) {
+	public void setColor(FieldType color) {
 		fieldtype = color;
 		
 	}
@@ -117,7 +117,7 @@ public class ClientHandler extends Thread {
 	}
 
 
-	public FieldType getPlayer() {
+	public FieldType getColor() {
 		return fieldtype;
 	}
 

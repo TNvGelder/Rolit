@@ -101,40 +101,29 @@ public class Game extends Observable {
 			
 		}
 		if (playerlist.size()==2){
-			playerlist.get(0).setPlayer(FieldType.RED);
-			playerlist.get(1).setPlayer(FieldType.YELLOW);
-			players = 2;
-
-			while (!board.isFull()){
-				doMove(playerlist.get(nextPlayer()-1).getMove(), current);
-			}
+			playerlist.get(0).setColor(FieldType.RED);
+			playerlist.get(1).setColor(FieldType.GREEN);
 		}
-		if (playerlist.size()==3){
-			playerlist.get(0).setPlayer(FieldType.RED);
-			playerlist.get(1).setPlayer(FieldType.YELLOW);
-			playerlist.get(2).setPlayer(FieldType.GREEN);
-			players = 3;
-			
-
-			while (!board.isFull()){
-				doMove(playerlist.get(nextPlayer()-1).getMove(), current);
-			}		
-		}
+		
+		if (playerlist.size() >= 3){
+			playerlist.get(0).setColor(FieldType.RED);
+			playerlist.get(1).setColor(FieldType.YELLOW);
+			playerlist.get(2).setColor(FieldType.GREEN);
+		}	
 
 		if (playerlist.size()==4){
-			playerlist.get(0).setPlayer(FieldType.RED);
-			playerlist.get(1).setPlayer(FieldType.YELLOW);
-			playerlist.get(2).setPlayer(FieldType.GREEN);
-			playerlist.get(3).setPlayer(FieldType.BLUE);
-			players = 4;
-			
-
-			while (!board.isFull()){
-				doMove(playerlist.get(nextPlayer()-1).getMove(), current);
-			}
-		
+			playerlist.get(3).setColor(FieldType.BLUE);	
 		}
 		
+		int i = 0;
+		while (!board.isFull() && i < playerlist.size()){
+			ClientHandler currentPlay = playerlist.get(i);
+			doMove(currentPlay.getMove(), currentPlay.getColor());
+			if (i == playerlist.size() - 1){
+				i = 0;
+			}
+			else { i++; }
+		}
 		System.out.println("game over");
 		//TODO: exit gracefully;
 		
@@ -144,6 +133,8 @@ public class Game extends Observable {
 	 * Current.ordinal() = current.ordinal()+1
 	 * @return
 	 */
+	
+	/*
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
 	private int nextPlayer() {
@@ -167,8 +158,8 @@ public class Game extends Observable {
 		else {
 			current = FieldType.values()[(current.ordinal()+1)];
 			return current.ordinal();
-		}*/
-	}
+		}
+	}*/
 	
 	public void update(){
 		//TODO: update the board with the new move.
@@ -191,7 +182,7 @@ public class Game extends Observable {
 	}
 
 	public int getPlayers() {
-		return players;
+		return playerlist.size();
 	}
 
 }
