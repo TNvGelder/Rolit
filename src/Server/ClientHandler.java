@@ -36,7 +36,7 @@ public class ClientHandler extends Thread {
 		try {
 			while (active) {
 				String msg = in.readLine();
-				System.out.println(msg);
+				server.serverUpdate(msg);
 				if (msg.startsWith("test")){
 					server.serverUpdate("TestMessage received!");
 				}

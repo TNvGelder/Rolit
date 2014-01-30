@@ -40,6 +40,7 @@ public class ServerHandler extends Thread {
 	}
 	
 	public void sendMessage(String msg){
+		System.out.println("Sending: " + msg);
 		if (msg != null){
 			try {
 				out.write(msg + "\n");

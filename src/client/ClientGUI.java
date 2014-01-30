@@ -61,15 +61,14 @@ public class ClientGUI extends JFrame implements Observer{
 		private ServerHandler serverHandler;
 		public RolitController(ServerHandler servHandler){
 			serverHandler = servHandler;
-			for (int i = 0; i < 10; i++){
+			for (int i = 0; i < 64; i++){
 				buttonArray[i].addActionListener(this);
 			}
 		}
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			JButton b = (JButton) e.getSource();
-			System.out.println(b.getName());
-			for (int i = 0; i < 10; i++){
+			for (int i = 0; i < 64; i++){
 				if (buttonArray[i].equals(b)){
 					serverHandler.sendMessage("move " + Board.toXCoord(i) + " " + Board.toYCoord(i));
 				}
