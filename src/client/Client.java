@@ -21,7 +21,7 @@ public class Client extends Thread implements Observer{
 	private ClientGUI			clientGui;
 	private Player 				player;
 	private ClientProtocol		protocol;
-	private Board				clientBoard = new Board();
+	private Board				clientBoard;
 	private FieldType			currentColor = FieldType.RED;
 	private List<Integer>		validMoves;
 
@@ -38,6 +38,10 @@ public class Client extends Thread implements Observer{
 		}
 		if (kindOfPlayer == "Human"){
 			clientGui = new ClientGUI(500, this);
+			clientBoard = new Board(clientGui);
+		}
+		else{
+			clientBoard = new Board();
 		}
 		serverhandler.run();
 	}

@@ -1,11 +1,17 @@
 package client;
+import game.FieldType;
 import game.Game;
 
+import java.awt.Color;
 import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
@@ -47,6 +53,30 @@ public class ClientGUI extends JFrame implements Observer{
 	
 	public void getmove(){
 		client.getValidList();
+		Iterator<Integer> validIterator = validList.iterator();
+		while(validIterator.hasNext()){
+			JButton validButton = buttonArray[validIterator.next()];
+			validButton.setEnabled(true);
+			validButton.setBackground(new Color(100,100,100));
+		}
+	}
+	
+	public void setField(int i, FieldType color) {
+		if (color == FieldType.RED){
+			buttonArray[i].setBackground(new Color(255,0,0));	
+		}
+		if (color == FieldType.YELLOW){
+			buttonArray[i].setBackground(new Color(255,255,0));	
+		}
+		if (color == FieldType.GREEN){
+			buttonArray[i].setBackground(new Color(0,255,0));	
+		}
+		if (color == FieldType.BLUE){
+			buttonArray[i].setBackground(new Color(0,0,255));	
+		}	
+		if (color == FieldType.EMPTY){
+			buttonArray[i].setBackground(new Color(0,0,0));	
+		}
 	}
 
 	public void init(){
@@ -54,6 +84,8 @@ public class ClientGUI extends JFrame implements Observer{
 		for (int i = 0; i < DIM*DIM; i++){
 			
 			JButton fieldButton = new JButton();
+			fieldButton.setBackground(new Color(0,0,0));
+			fieldButton.setEnabled(false);
 			buttonArray[i] = fieldButton;
 			boardPanel.add(buttonArray[i]);
 		}
@@ -94,4 +126,5 @@ public class ClientGUI extends JFrame implements Observer{
 		}
 		
 	}
+
 }

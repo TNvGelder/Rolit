@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import client.ClientGUI;
 import game.FieldType;
 
 /**
@@ -19,6 +20,7 @@ public class Board {
 
     private static final String SEPERATOR = INDEXING[0];
     private static final String WHITESPACE = "    ";
+    private ClientGUI gui;
     
     int redFields = 0;
     int yellowFields = 0;
@@ -37,7 +39,16 @@ public class Board {
 	/**
 	 * Create a board and set the 4 default fields. 
 	 */
+	public Board(ClientGUI gui){
+		this.gui = gui;
+		prepareBoard();
+	}
+	
 	public Board(){
+		prepareBoard();
+	}
+	
+	public void prepareBoard(){
 		fields = new FieldType[ DIM ][ DIM ];
 		index = new FieldType[ DIM * DIM ];
 		for (int y = 0; y < DIM; y++) { //EERST DE Y
@@ -157,14 +168,20 @@ public class Board {
 	 * @param color
 	 */
 	public void setField(int x, int y, FieldType color){
+		int i = toIndex(x,y);
 		FieldType oldColour = getField(x,y);
 		changeClrCount(-1, oldColour);
 		changeClrCount(1, color);
 		fields[x][y] = color;
-		index[toIndex(x,y)] = color;
+		index[i] = color;
+		if (gui != null){
+			gui.setField(i,color);
+		}
+		
 	}
 	public void setField(int i, FieldType color){
 		setField(toXCoord(i), toYCoord(i), color);
+		
 	}
 	
 	/**
