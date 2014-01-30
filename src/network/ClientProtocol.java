@@ -125,5 +125,74 @@ public class ClientProtocol {
         private ServerHandler parentHandler = null;
         
         public HashMap<String,Integer[]> clientCommands = new HashMap<String,Integer[]>();
+        
+    	public boolean isValidCommand(String msg) {
+
+    		String[] splitCommand = msg.split(" ");
+    		String command = splitCommand[0].toLowerCase();
+    		int numArgs = splitCommand.length - 1;
+
+    		if (clientCommands.containsKey(command)) {
+    			for (int possibleArgs : clientCommands.get(command)) {
+    				if (numArgs == possibleArgs) {
+    					return true;
+    				}
+    				if (possibleArgs == -1 && numArgs > 0
+    						&& command.equals(ClientProtocol.MESSAGE)) {
+    					return true;
+    				}
+    			}
+    		}
+    		return false;
+    	}
+    	public void doCommand(String msg) throws IllegalArgumentException,
+		IOException {
+			String[] splitCommand = msg.split(" ");
+			String command = splitCommand[0].toLowerCase();
+			int numArgs = splitCommand.length - 1;
+			String[] args = new String[numArgs];
+			for (int i = 1; i <= numArgs; i++) {
+				args[i - 1] = splitCommand[i];
+			}
+			switch (command) {
+			case HANDSHAKE:
+				int supports = Integer.parseInt(args[1]);
+				hello(args[0], supports, args[2]);
+				break;
+			case ERROR:
+				int code = Integer.parseInt(args[0]);
+				error(code);
+				break;
+			case CREATE_GAME:
+				createGame();
+				break;
+			case JOIN_GAME:
+				joinGame(args[0]);
+				break;
+			case START_GAME:
+				startGame();
+				break;
+			case MOVE:
+				int x = Integer.parseInt(args[0]);
+				int y = Integer.parseInt(args[1]);
+				move(x, y);
+				break;
+			case MESSAGE:
+				String mesg = "";
+				for (String arg : args) {
+					if (mesg.equals("")) {
+						mesg = arg;
+					} else {
+						mesg = mesg + " " + arg;
+					}
+				}
+				message(mesg);
+				break;
+			default:
+				// Unknown command or non-sensical message
+				break;
+			}
+}
+    	
 
 }
