@@ -13,7 +13,7 @@ import network.Errors;
 import Server.ClientHandler;
 import game.Game;
 
-public class ServerProtocol {
+public class ServerProtocol implements Runnable {
         
         // Dit zijn alle commando's die de server kan ONTVANGEN van de client,
         // dus, waarmee de server dingen moet kunnen doen.
@@ -189,6 +189,8 @@ public class ServerProtocol {
        
         public HashMap<String,Integer[]> serverCommands = new HashMap<String,Integer[]>();
 
+		private Thread thread;
+
         public boolean isValidCommand(String msg) {
                 
                 String[] splitCommand = msg.split(" ");
@@ -331,11 +333,27 @@ public class ServerProtocol {
                 this.handler.sendCommand(ClientProtocol.GAME, new String[]{creator, status, numPlayers});
         }
         
+        public void run(){
+        	serverCommands.put(ServerProtocol.HANDSHAKE.toLowerCase(), new Integer[]{3});
+            serverCommands.put(ServerProtocol.ERROR.toLowerCase(), new Integer[]{1});
+            serverCommands.put(ServerProtocol.AUTH.toLowerCase(), new Integer[]{1});
+            serverCommands.put(ServerProtocol.CREATE_GAME.toLowerCase(), new Integer[]{0});
+            serverCommands.put(ServerProtocol.JOIN_GAME.toLowerCase(), new Integer[]{1});
+            serverCommands.put(ServerProtocol.START_GAME.toLowerCase(), new Integer[]{0});
+            serverCommands.put(ServerProtocol.MOVE.toLowerCase(), new Integer[]{2});
+            serverCommands.put(ServerProtocol.MESSAGE.toLowerCase(), new Integer[]{-1});
+            serverCommands.put(ServerProtocol.CHALLENGE.toLowerCase(), new Integer[]{1,2,3});
+            serverCommands.put(ServerProtocol.CHALLENGE_RESPONSE.toLowerCase(), new Integer[]{1});
+            serverCommands.put(ServerProtocol.HIGHSCORE.toLowerCase(), new Integer[]{2});
+        }
+        
         
         public ServerProtocol(ClientHandler handler){
                 if(handler != null){
                         this.handler = handler;
                 }
+                this.thread = new Thread(this);
+                this.thread.start();
         }
 
 		
