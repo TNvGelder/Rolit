@@ -7,11 +7,11 @@ public abstract class Player {
 	
 	//Instance variables
 	private String name;
-	private FieldType color;
+	private Client client;
 	
-	public Player (String name, FieldType color){
+	public Player (String name, Client cl){
 		this.name = name;
-		this.color = color;
+		client = cl;
 	}
 
 	//Queries
@@ -24,13 +24,6 @@ public abstract class Player {
 		return name;
 	}
 	
-	/**
-	 * Returns the color of the player.
-	 * @return color
-	 */
-	public FieldType getColor(){
-		return color;
-	}
 
 	/**
 	 * Get the move that is to be made.

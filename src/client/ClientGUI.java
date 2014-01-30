@@ -1,11 +1,12 @@
 package client;
 import game.Game;
 
-import java.awt.*;
+import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -25,9 +26,12 @@ public class ClientGUI extends JFrame implements Observer{
 	private JButton[] buttonArray = new JButton[DIM*DIM];
 	private JLabel turnInfo = new JLabel("Playername's turn");
 	private int boardSize;
+	private Client client;
+	private List<Integer> validList;
 	
 	public ClientGUI(int size, Client cl){
 		super("Rolit Client");
+		client = cl;
 		boardSize = size;
 		init();
 		RolitController testctrl1 = this.new RolitController(cl);
@@ -39,6 +43,10 @@ public class ClientGUI extends JFrame implements Observer{
                  System.exit(0);
              }
 		 });
+	}
+	
+	public void getmove(){
+		client.getValidList();
 	}
 
 	public void init(){
@@ -79,7 +87,7 @@ public class ClientGUI extends JFrame implements Observer{
 			JButton b = (JButton) e.getSource();
 			for (int i = 0; i < 64; i++){
 				if (buttonArray[i].equals(b)){
-					client.move(i);
+					client.sendMove(i);
 				}
 			}
 			

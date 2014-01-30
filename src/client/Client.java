@@ -63,6 +63,10 @@ public class Client extends Thread implements Observer{
 		
 	}
 	
+	public List<Integer> getValidList(){
+		return validMoves;
+	}
+	
 	/**
 	 *Zorgt ervoor dat de player weet dat hij aan de beurt is en geeft een lijst van geldige zetten aan de player. 
 	 */
