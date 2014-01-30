@@ -1,4 +1,7 @@
-package game;
+package client;
+
+import game.Board;
+import game.FieldType;
 
 public abstract class Player {
 	

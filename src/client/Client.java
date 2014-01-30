@@ -10,6 +10,7 @@ import java.io.OutputStreamWriter;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -20,6 +21,10 @@ public class Client extends Thread implements Observer{
 	private ClientGUI			clientGui;
 	private Player 				player;
 	private ClientProtocol		protocol;
+	private Board				clientBoard = new Board();
+	private FieldType			currentColor = FieldType.RED;
+	private List<Integer>		validMoves;
+
 	
 	public Client(String name, InetAddress address, int port, String kindOfPlayer){
 		//TODO: stuff ;maak serverhandler-> doe communicatie met server;
@@ -32,7 +37,7 @@ public class Client extends Thread implements Observer{
 			e.printStackTrace();
 		}
 		if (kindOfPlayer == "Human"){
-			clientGui = new ClientGUI(500, serverhandler);
+			clientGui = new ClientGUI(500, this);
 		}
 		serverhandler.run();
 	}
@@ -43,6 +48,30 @@ public class Client extends Thread implements Observer{
 	
 	public Player getPlayer(){
 		return player;
+	}
+	
+	/**
+	 * Zend een zet naar de ServerHandler
+	 */
+	public void sendMove(int move){
+		if (!validMoves.contains(move)){
+			doMove();
+		}
+		else{
+			serverhandler.sendMessage("Move " + Board.toXCoord(move) + " " + Board.toYCoord(move));
+		}
+		
+	}
+	
+	/**
+	 *Zorgt ervoor dat de player weet dat hij aan de beurt is en geeft een lijst van geldige zetten aan de player. 
+	 */
+	public void doMove(){
+		validMoves = clientBoard.getValidList(currentColor);
+	}
+	
+	public int getHint(){
+		return 0;
 	}
 	
 	public String getClientName(){

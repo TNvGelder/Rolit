@@ -1,4 +1,8 @@
-package game;
+package client;
+
+import game.Board;
+import game.FieldType;
+import game.Game;
 
 import java.util.Iterator;
 import java.util.List;
@@ -9,8 +13,8 @@ public class BasicAI extends Player{
 	private FieldType myColour;
 	private Game game;
 	
-	public BasicAI(String name, FieldType color){
-		super(name, color);
+	public BasicAI(String name, Client cl){
+		super(name, cl);
 	}
 	
 	@Override

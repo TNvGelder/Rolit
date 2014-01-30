@@ -25,14 +25,12 @@ public class ClientGUI extends JFrame implements Observer{
 	private JButton[] buttonArray = new JButton[DIM*DIM];
 	private JLabel turnInfo = new JLabel("Playername's turn");
 	private int boardSize;
-	private ServerHandler serverHandler;
 	
-	public ClientGUI(int size, ServerHandler servHandler){
+	public ClientGUI(int size, Client cl){
 		super("Rolit Client");
 		boardSize = size;
 		init();
-		serverHandler = servHandler;
-		RolitController testctrl1 = this.new RolitController(serverHandler);
+		RolitController testctrl1 = this.new RolitController(cl);
 		addWindowListener(new WindowAdapter() {
              public void windowClosing(WindowEvent e) {
                  e.getWindow().dispose();
@@ -69,9 +67,9 @@ public class ClientGUI extends JFrame implements Observer{
 	}
 	
 	public class RolitController implements ActionListener{
-		private ServerHandler serverHandler;
-		public RolitController(ServerHandler servHandler){
-			serverHandler = servHandler;
+		private Client client;
+		public RolitController(Client cl){
+			client = cl;
 			for (int i = 0; i < 64; i++){
 				buttonArray[i].addActionListener(this);
 			}
@@ -81,7 +79,7 @@ public class ClientGUI extends JFrame implements Observer{
 			JButton b = (JButton) e.getSource();
 			for (int i = 0; i < 64; i++){
 				if (buttonArray[i].equals(b)){
-					serverHandler.sendMessage("move " + Board.toXCoord(i) + " " + Board.toYCoord(i));
+					client.move(i);
 				}
 			}
 			

@@ -3,6 +3,8 @@ package game;
 import java.util.List;
 import java.util.Scanner;
 
+import client.Player;
+
 public class HumanPlayer extends Player {
 	
 	public HumanPlayer(String name, FieldType color) {

@@ -1,5 +1,8 @@
 package game;
 
+import client.BasicAI;
+import client.Player;
+
 public class BasicAITest {
 
 	static Game testGame = new Game();

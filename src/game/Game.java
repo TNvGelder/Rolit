@@ -93,7 +93,7 @@ public class Game extends Observable {
 	}
 	
 	/**
-	 * Start this game: create a board and keep things updated.
+	 * Start this game, and ask for moves by iterating over the clienthandlers.
 	 */
 	public void startGame(){
 		if (playerlist.size()<2 || playerlist.size()>4) {
