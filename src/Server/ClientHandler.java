@@ -17,7 +17,7 @@ public class ClientHandler extends Thread {
 	private String          clientName = "[clientName]";
 	private boolean			handshaked = false;
 	private boolean 		active = true;
-	private ServerProtocol  protocol;
+	private ServerProtocol  protocol = new ServerProtocol(this);
 	private FieldType		fieldtype;
 	public ClientInformation clientInfo;
 	
@@ -41,8 +41,7 @@ public class ClientHandler extends Thread {
 					server.serverUpdate("TestMessage received!");
 				}
 				
-				/* Does not work yet.
-				 * if (protocol.isValidCommand(msg)) {
+				if (protocol.isValidCommand(msg)) {
 				 
 					try {
 						protocol.doCommand(msg);
@@ -50,7 +49,7 @@ public class ClientHandler extends Thread {
 						server.serverUpdate("Illegal arguments" + msg);
 					}
 				}
-			*/}
+			}
 			
 
 		} catch (IOException e) {
