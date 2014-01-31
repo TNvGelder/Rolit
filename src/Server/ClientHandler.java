@@ -5,43 +5,64 @@ import game.FieldType;
 import java.io.*;
 import java.net.*;
 
+import network.ServerProtocol;
+
 public class ClientHandler extends Thread {
 
-	private Server          server;
+	public Server          	server;
 	private Socket          sock;
 	private int				gameNumber = -1;
 	private BufferedReader  in;
 	private BufferedWriter  out;
 	private String          clientName = "[clientName]";
+	private boolean			handshaked = false;
+	private boolean 		active = true;
+	private ServerProtocol  protocol = new ServerProtocol(this);
+	private FieldType		fieldtype;
+	public ClientInformation clientInfo;
+	
 
 	public ClientHandler(Server server, Socket sock) throws IOException {
 		this.server = server;
 		this.sock = sock;
 		out = new BufferedWriter(new OutputStreamWriter(sock.getOutputStream()));
 		in = new BufferedReader(new InputStreamReader(sock.getInputStream()));
+		server.serverUpdate("Client connected to the server");
 	}
 	
 	
 	public void run() {
-		//TODO: a lot
+		// TODO: a lot
 		try {
-			while (true){
-		
-			//TODO: run program, listen to input
-			String input = in.readLine();
-			//TODO: seperate commands using protocol
+			while (active) {
+				String msg = in.readLine();
+				server.serverUpdate(msg);
+				if (msg.startsWith("test")){
+					server.serverUpdate("TestMessage received!");
+				}
+				
+				if (protocol.isValidCommand(msg)) {
+				 
+					try {
+						protocol.doCommand(msg);
+					} catch (IllegalArgumentException e) {
+						server.serverUpdate("Illegal arguments" + msg);
+					}
+				}
 			}
-		}
-		catch (IOException e){
+			
+
+		} catch (IOException e) {
 			shutdown();
 		}
+		
 	}
 
 	/**
 	 * Zend een message naar de client.
 	 * @param msg De message voor de client
 	 */
-	public synchronized void sendMessage(String msg) {
+	public void sendMessage(String msg) {
 		try {
 			out.write(msg + "\n");
 			out.flush();
@@ -78,8 +99,8 @@ public class ClientHandler extends Thread {
 	}
 
 
-	public void addPlayer(FieldType color) {
-		// TODO add a player, human (or AI)
+	public void setColor(FieldType color) {
+		fieldtype = color;
 		
 	}
 
@@ -87,6 +108,17 @@ public class ClientHandler extends Thread {
 	public int getMove() {
 		// TODO Get move from the client.
 		return 0;
+	}
+
+
+	public void sendCommand(String handshake, String[] strings) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	public FieldType getColor() {
+		return fieldtype;
 	}
 
 }

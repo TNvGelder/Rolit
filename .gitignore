@@ -1,3 +1,4 @@
 *.class
 *.jar
 /bin
+src/game/Game.java.rej

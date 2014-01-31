@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import client.ClientGUI;
 import game.FieldType;
 
 /**
@@ -19,6 +20,7 @@ public class Board {
 
     private static final String SEPERATOR = INDEXING[0];
     private static final String WHITESPACE = "    ";
+    private ClientGUI gui;
     
     int redFields = 0;
     int yellowFields = 0;
@@ -37,7 +39,16 @@ public class Board {
 	/**
 	 * Create a board and set the 4 default fields. 
 	 */
+	public Board(ClientGUI gui){
+		this.gui = gui;
+		prepareBoard();
+	}
+	
 	public Board(){
+		prepareBoard();
+	}
+	
+	public void prepareBoard(){
 		fields = new FieldType[ DIM ][ DIM ];
 		index = new FieldType[ DIM * DIM ];
 		for (int y = 0; y < DIM; y++) { //EERST DE Y
@@ -106,6 +117,13 @@ public class Board {
 	}
 	
 	/**
+	 * Get the DIM.
+	 */
+	public int getDim(){
+		return DIM;
+	}
+	
+	/**
 	 * Standard method for in-game moves. Checks whether the move is valid, then proceeds with game.
 	 * @param x
 	 * @param y
@@ -118,6 +136,7 @@ public class Board {
 			beat(x,y,player,true);
 			//Als valid move is, zijn ook de stenen al gezet.
 		}
+		else System.out.println("Error: invalid move");
 	}
 	public void move(int i, FieldType player){
 		move(toXCoord(i), toYCoord(i), player);
@@ -149,14 +168,20 @@ public class Board {
 	 * @param color
 	 */
 	public void setField(int x, int y, FieldType color){
+		int i = toIndex(x,y);
 		FieldType oldColour = getField(x,y);
 		changeClrCount(-1, oldColour);
 		changeClrCount(1, color);
 		fields[x][y] = color;
-		index[toIndex(x,y)] = color;
+		index[i] = color;
+		if (gui != null){
+			gui.setField(i,color);
+		}
+		
 	}
 	public void setField(int i, FieldType color){
 		setField(toXCoord(i), toYCoord(i), color);
+		
 	}
 	
 	/**
@@ -423,12 +448,12 @@ public class Board {
 		//TO-DO opvangen als -1 < x > 8 || -1 < y > 8;
 		
 	}
-	public int toXCoord(int index){
+	public static int toXCoord(int index){
 		return index % 8;
 		
 		//TO-DO opvangen als -1 < index > 63;
 	}
-	public int toYCoord(int index){
+	public static int toYCoord(int index){
 		return index / 8; 
 		
 		//TO-DO opvangen als -1 < index > 63;
@@ -474,6 +499,7 @@ public class Board {
 		s = s + "\n" + SEPERATOR;
         return s;
      }
+	/*
 	public static void main(String args[]){
 		Board board = new Board();
 		System.out.println(board.toString());
@@ -483,5 +509,6 @@ public class Board {
 		board.move(44, FieldType.YELLOW);
 		System.out.println(board.toString());
 	}
+	*/
 	
 }

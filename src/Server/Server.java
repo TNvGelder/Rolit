@@ -7,22 +7,23 @@ import java.util.*;
 import game.Game;
 
 public class Server extends Thread{
-	private int port;
-	private Collection<ClientHandler> clients;
-	private boolean error;
-	private ServerSocket serversocket;
-	public ServerGUI serverGUI;
-	private List<String> availableplayers = new ArrayList<String>();
-	private int gamecounter = 0;
-	public Game[] games = new Game[20];
+	private int 						port;
+	private Collection<ClientHandler> 	clients;
+	private ServerSocket 				serversocket;
+	public ServerGUI 					serverGUI;
+	private List<ClientHandler> 		lobby 				= new ArrayList<ClientHandler>();
+	private int 						gamecounter = 0;
+	public Game[] 						games 				= new Game[100];
+	public ServerInformation			serverInfo;
 
 	/**  
-	  * Construct a server with a port. Make a collection of clienthandlers possible. 
+	  * De constructor start server en luistert op de aangegeven poort. Ook linkt hij de server met zijn GUI. 
 	  * @throws IOException 
 	  */
 	
-	public Server(int port) throws IOException {
+	public Server(int port, ServerGUI serverGUI) throws IOException {
 		this.port = port;
+		this.serverGUI = serverGUI;
 		clients = new ArrayList<ClientHandler>();
 		try {
 			serversocket = new ServerSocket(port);
@@ -31,6 +32,8 @@ public class Server extends Thread{
 		} catch (IllegalArgumentException e){
 			throw e;
 		}
+		
+		
 	}
 
 	/**
@@ -46,12 +49,23 @@ public class Server extends Thread{
 				try {
 					sock = serversocket.accept();
 				
-				ClientHandler sc = new ClientHandler(this, sock);
-				sc.start();
-				serverGUI.update("Sock accepted");
+					ClientHandler client = new ClientHandler(this, sock);
+					serverGUI.update("Clienthandler created");
+					client.start();
+					lobby.add(client);
+					serverGUI.update(lobby.get(0).getName());
+					/* Put handler in waitinglist;
+					while (sc.getGameNumber()==-1){
+						int i = 0;
+						if (games[i].getPlayerList().size()<4){
+							games[i].add(sc);
+							sc.setGameNumber(i);
+						}
+						i++;
+					}*/
+					this.messageAll("test");
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					serverUpdate("Something went wrong: " + e.getMessage());
 				}
 		}
 	}
@@ -61,10 +75,13 @@ public class Server extends Thread{
 	 * naar alle aangesloten Clients.
 	 * @param msg bericht dat verstuurd wordt
 	 */
-	public synchronized void messageAll(String msg) {
-		serverGUI.update(msg);
-		for(Iterator<ClientHandler> iterator = clients.iterator(); iterator.hasNext();){
-			((ClientHandler) iterator.next()).sendMessage(msg);
+	public void messageAll(String msg) {
+		serverGUI.update("Sending " + msg + " to all ClientHandlers");
+		Iterator<ClientHandler> iterator = lobby.iterator();
+		while(iterator.hasNext()){
+			ClientHandler receiver = iterator.next();
+			serverGUI.update("Sending message to " + receiver.getClientName());
+			receiver.sendMessage(msg);
 		}
 	}
 	
@@ -84,6 +101,10 @@ public class Server extends Thread{
 		}
 	}
 	
+	/**
+	 * Send message to server only.
+	 * @param msg
+	 */
 	public void serverUpdate(String msg){
 		serverGUI.update(msg);
 	}
@@ -111,24 +132,57 @@ public class Server extends Thread{
 	 */
 	public synchronized void removeHandler(ClientHandler handler) {
 		clients.remove(handler);
-		leaveGame(handler);
+		handler.shutdown();
 	}
 	
+	/**
+	 * Verwijdert client uit game.
+	 * @param handler
+	 */
 	public void leaveGame(ClientHandler handler){
+		
 		//TODO: destroy game, disconnect client.
+		messageAll("Client " + handler.getName() + " has left the game");
 	}
 	
 	public void createGame(String name, int players){
-		Game newgame = new Game(gamecounter);
+		if (games[gamecounter] != null){
+			++gamecounter;
+		}
+			games[gamecounter] = new Game(gamecounter);
+			lobby.remove(lobby.indexOf(name));
+
 	}
 	
-	public synchronized void shutdown() {
-		messageAll("error You have been disconnected from the server");
-		try {
-			serversocket.close();
-			System.exit(-1);
-		} catch (IOException e) {
-			e.printStackTrace();
+	public void joinGame(ClientHandler client, int gameID){
+		games[gameID].add(client);
+		lobby.remove(client);
+	}
+	
+	public void startGame(int id){
+		games[id].startGame();
+	}
+	
+	public void shutdown() {
+		this.messageAll("Shutting down server...");
+        try {
+            this.serversocket.close();
+        } catch (Exception e) { }
+	}
+
+	public boolean hasClient(String clientName) {
+		boolean result = false;
+		for (ClientHandler it : clients){
+			if (it.getClientName().equals(clientName)){
+				result = true;
+			}
 		}
+		// TODO is clientName already in use?
+		return result;
+	}
+
+	public ClientHandler getClient(String name) {
+		// TODO return ClientHandler object from a string
+		return null;
 	}
 }

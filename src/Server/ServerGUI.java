@@ -169,13 +169,13 @@ public class ServerGUI extends JFrame implements ActionListener {
         bConnect.setEnabled(false);
 
         try {
-			server = new Server(port);			//Construct server
+			server = new Server(port, this);			//Construct server
 		} catch (IOException e) {
 			System.out.print("Some IOException occured: "+e);
 		}
         server.start();
 
-        addMessage("Started listening on port " + port + "...");
+        addMessage("Connectie op poort: " + port);
     }
 
     /** Voegt een bericht toe aan de TextArea op het frame. */
