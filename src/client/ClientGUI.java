@@ -16,10 +16,11 @@ import javax.swing.border.Border;
 
 
 public class ClientGUI extends JFrame implements ActionListener, Observer{
-	private int DIM = 8;
+	private static final int DIM = 8;
 	private Container c = getContentPane();
 	private JPanel boardPanel = new JPanel();
-	private JButton[] buttonArray = new JButton[64];
+	private JPanel infoPanel = new JPanel();
+	private JButton[] buttonArray = new JButton[DIM*DIM];
 	private JLabel turnInfo = new JLabel("Playername's turn");
 	private int boardSize;
 	
@@ -30,7 +31,7 @@ public class ClientGUI extends JFrame implements ActionListener, Observer{
 	}
 
 	public void init(){
-		for (int i = 0; i < 64; i++){
+		for (int i = 0; i < DIM*DIM ; i++){
 			Border boardLine = BorderFactory.createLineBorder(Color.black);
 			
 			JButton fieldButton = new JButton();
