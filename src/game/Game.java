@@ -19,6 +19,7 @@ public class Game{
 	private FieldType current = FieldType.RED;
 	private Server server;
 	public  ClientHandler ownerClient;
+	public boolean moveDone = false;
 	public  int status = 0;
 	
 	
@@ -61,7 +62,8 @@ public class Game{
 		if (board.getValidList(color).contains(position)){
 		}
 		server.moveDone(Board.toXCoord(position), Board.toYCoord(position));
-		notify();
+		moveDone = true;
+		this.notify();
 	}
 	
 	/**
@@ -122,17 +124,24 @@ public class Game{
 		int i = 0;
 		while (!board.isFull() && i < playerlist.size()){
 			ClientHandler currentPlay = playerlist.get(i);
+			System.out.println(currentPlay.getColor().toString());
 			doMove(currentPlay.getMove(), currentPlay.getColor());
 			if (i == playerlist.size() - 1){
 				i = 0;
 			}
-			try {
-				wait();
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			else{
+				i++;
 			}
-			i++;
+			while (!moveDone){
+				try {
+					this.wait();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}	
+			}
+			moveDone = false;
+
 		}
 		System.out.println("game over");
 		//TODO: exit gracefully;

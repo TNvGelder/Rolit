@@ -55,9 +55,10 @@ public class Client extends Thread{
 		player = playertype;
 	}
 	
-	public Player getPlayer(){
-		return player;
+	public void nextColor(){
+		currentColor = currentColor.nextFieldType(playerCount);
 	}
+	
 	
 	/**
 	 * Stuurt een zet naar de ClientHandler. Indien de move niet geldig is vraagt het opnieuw voor een move.
@@ -144,7 +145,7 @@ public class Client extends Thread{
 	
 	public static void main(String[] args){
 		try {
-			new Client("testClient", InetAddress.getLocalHost() ,2727, "Human", 4);
+			new Client("testClient", InetAddress.getLocalHost() ,2727, "Human", 2);
 		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

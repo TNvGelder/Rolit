@@ -32,12 +32,13 @@ public class ServerHandler extends Thread {
 					System.out.println("TestMessage received!");
 					sendMessage("test");
 				}
+				String[] argumentArray = msg.split(" ");
+				System.out.println(argumentArray[0]);
 				if (msg.toLowerCase().startsWith("movedone")){
 					System.out.println("moved");
-					String[] argumentArray = msg.split(" ");
 					client.move(Integer.parseInt(argumentArray[2]), Integer.parseInt(argumentArray[3]));
 				}
-				if (msg.toLowerCase().startsWith("move")){
+				if (msg.toLowerCase().startsWith("move") && !msg.toLowerCase().startsWith("movedone")){
 					client.doMove();
 				}
 			}

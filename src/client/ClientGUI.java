@@ -84,6 +84,7 @@ public class ClientGUI extends JFrame{
 		if (color == FieldType.EMPTY){
 			buttonArray[i].setBackground(new Color(0,0,0));	
 		}
+		client.nextColor();
 	}
 
 	/**
