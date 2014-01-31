@@ -61,7 +61,7 @@ public class Server extends Observable implements Runnable{
 					if (lobby.size() == 2){
 						createGame("game1");
 						joinGame(lobby.get(0),gamecounter);
-						joinGame(lobby.get(1),gamecounter);
+						joinGame(lobby.get(0),gamecounter);
 						startGame(gamecounter);
 					}
 					/* Put handler in waitinglist;
@@ -164,7 +164,7 @@ public class Server extends Observable implements Runnable{
 			++gamecounter;
 		}
 			games[gamecounter] = new Game(gamecounter, this);
-			lobby.remove(lobby.indexOf(name));
+			//lobby.remove(lobby.indexOf(name));
 
 	}
 	
