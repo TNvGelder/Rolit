@@ -25,7 +25,7 @@ import javax.swing.border.Border;
 
 import game.Board;
 
-public class ClientGUI extends JFrame implements Observer{
+public class ClientGUI extends JFrame{
 	private static final int DIM = 8;
 	private Container c = getContentPane();
 	private JPanel boardPanel = new JPanel();
@@ -51,8 +51,8 @@ public class ClientGUI extends JFrame implements Observer{
 		 });
 	}
 	
-	public void getmove(){
-		client.getValidList();
+	public void makeMove(){
+		validList =  client.getValidMoves();
 		Iterator<Integer> validIterator = validList.iterator();
 		while(validIterator.hasNext()){
 			JButton validButton = buttonArray[validIterator.next()];
@@ -100,11 +100,6 @@ public class ClientGUI extends JFrame implements Observer{
 		setVisible(true);
 	}	
 
-	@Override
-	public void update(Observable o, Object arg) {
-		// TODO Auto-generated method stub
-		
-	}
 	
 	public class RolitController implements ActionListener{
 		private Client client;
@@ -118,6 +113,11 @@ public class ClientGUI extends JFrame implements Observer{
 		public void actionPerformed(ActionEvent e) {
 			JButton b = (JButton) e.getSource();
 			for (int i = 0; i < 64; i++){
+				JButton button = buttonArray[i];
+				if (button.isEnabled()){
+					button.setEnabled(false);
+					button.setBackground(new Color(0,0,0));
+				}
 				if (buttonArray[i].equals(b)){
 					client.sendMove(i);
 				}
