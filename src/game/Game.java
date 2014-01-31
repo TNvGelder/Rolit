@@ -132,7 +132,7 @@ public class Game{
 			else{
 				i++;
 			}
-			while (!moveDone){
+			while (moveDone == false){
 				try {
 					this.wait();
 				} catch (InterruptedException e) {
