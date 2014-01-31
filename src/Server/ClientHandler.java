@@ -1,11 +1,14 @@
 package Server;
 
 import game.FieldType;
+import game.Game;
 
 import java.io.*;
 import java.net.*;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import network.ServerProtocol;
 
@@ -22,6 +25,8 @@ public class ClientHandler extends Thread implements Observer{
 	private int				move = -1;
 	private ServerProtocol  protocol = new ServerProtocol(this);
 	private FieldType		fieldtype;
+	private Lock			lock = new ReentrantLock();
+	private Game			game;
 	public ClientInformation clientInfo;
 	
 
@@ -89,6 +94,10 @@ public class ClientHandler extends Thread implements Observer{
 		}
 	}
 	
+	public void addGame(Game g){
+		game = g;
+	}
+	
 	public String getClientName(){
 		return clientName;
 	}
@@ -108,20 +117,13 @@ public class ClientHandler extends Thread implements Observer{
 	}
 
 	public void move(int index){
-		move = index;
+		game.doMove(index, fieldtype);
+		lock.unlock();
 	}
 	
-	public int getMove() {
+	public void getMove() {
+		lock.lock();
 		sendMessage("move");
-		while (move == -1){
-			try {
-				wait(); //TODO Dit kan misschien wat efficienter?
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		return move;
 		
 	}
 
