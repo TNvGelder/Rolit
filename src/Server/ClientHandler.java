@@ -114,10 +114,9 @@ public class ClientHandler extends Thread implements Observer{
 		sendMessage("move");
 		while (move == -1){
 			try {
-				wait(); //TODO Dit kan misschien wat efficienter?
+				wait();
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				System.out.println(e.getMessage());;
 			}
 		}
 		return move;
