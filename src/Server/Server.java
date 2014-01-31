@@ -6,7 +6,7 @@ import java.util.*;
 
 import game.Game;
 
-public class Server extends Observable{
+public class Server extends Observable implements Runnable{
 	private int 						port;
 	private Collection<ClientHandler> 	clients;
 	private ServerSocket 				serversocket;

@@ -173,7 +173,8 @@ public class ServerGUI extends JFrame implements ActionListener {
 		} catch (IOException e) {
 			System.out.print("Some IOException occured: "+e);
 		}
-        server.run();
+        Thread serverThread = new Thread(server);
+        serverThread.start();
 
         addMessage("Connectie op poort: " + port);
     }
