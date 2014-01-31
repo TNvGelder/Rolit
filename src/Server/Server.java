@@ -6,7 +6,7 @@ import java.util.*;
 
 import game.Game;
 
-public class Server extends Thread{
+public class Server extends Observable{
 	private int 						port;
 	private Collection<ClientHandler> 	clients;
 	private ServerSocket 				serversocket;
@@ -34,6 +34,10 @@ public class Server extends Thread{
 		}
 		
 		
+	}
+	
+	public void moveDone(int x, int y){
+		messageAll("moveDone " + "playername " + x + " "+y);
 	}
 
 	/**
@@ -77,14 +81,17 @@ public class Server extends Thread{
 	 */
 	public void messageAll(String msg) {
 		serverGUI.update("Sending " + msg + " to all ClientHandlers");
+		setChanged();
+		notifyObservers(msg);
+		/*
 		Iterator<ClientHandler> iterator = lobby.iterator();
 		while(iterator.hasNext()){
 			ClientHandler receiver = iterator.next();
 			serverGUI.update("Sending message to " + receiver.getClientName());
 			receiver.sendMessage(msg);
 		}
+			*/
 	}
-	
 	/**
 	 * Send message to certain game. Iterate over Collection and 
 	 * send message for every clienthandler with this gameNumber.
@@ -122,6 +129,7 @@ public class Server extends Thread{
 		}
 		if (!existing){
 			clients.add(handler);
+			addObserver(handler);
 		}
 		return !existing;
 	}
@@ -149,7 +157,7 @@ public class Server extends Thread{
 		if (games[gamecounter] != null){
 			++gamecounter;
 		}
-			games[gamecounter] = new Game(gamecounter);
+			games[gamecounter] = new Game(gamecounter, this);
 			lobby.remove(lobby.indexOf(name));
 
 	}

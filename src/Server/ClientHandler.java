@@ -4,10 +4,12 @@ import game.FieldType;
 
 import java.io.*;
 import java.net.*;
+import java.util.Observable;
+import java.util.Observer;
 
 import network.ServerProtocol;
 
-public class ClientHandler extends Thread {
+public class ClientHandler extends Thread implements Observer{
 
 	public Server          	server;
 	private Socket          sock;
@@ -132,6 +134,13 @@ public class ClientHandler extends Thread {
 
 	public FieldType getColor() {
 		return fieldtype;
+	}
+
+
+	@Override
+	public void update(Observable o, Object arg) {
+		sendMessage((String) arg);
+		
 	}
 
 }

@@ -10,22 +10,26 @@ import java.util.Set;
 import Server.ClientHandler;
 import Server.Server;
 
-public class Game extends Observable {
+public class Game{
 	
 	private int gameID;
 	private int players;
 	private List<ClientHandler> playerlist = new ArrayList<ClientHandler>();
 	private Board board;
 	private FieldType current = FieldType.RED;
+	private Server server;
 	public  ClientHandler ownerClient;
 	public  int status = 0;
 	
-	public Game(int id){
+	
+	public Game(int id, Server serv){
 		gameID = id;
 		board = new Board();
+		server = serv;
 	}
-	public Game(int id, int players){
-		this(id);
+	public Game(int id, Server serv, int players){
+		gameID = id;
+		server = serv;
 		this.players = players;
 	}
 	
@@ -54,10 +58,9 @@ public class Game extends Observable {
 	public void doMove(int position, FieldType color){
 		board.move(position, color);
 		System.out.println("\n" + board.toString()+ "\n");
-		setChanged();
 		if (board.getValidList(color).contains(position)){
-			notifyObservers(position);	
 		}
+		server.moveDone(Board.toXCoord(position), Board.toYCoord(position));
 	}
 	
 	/**
