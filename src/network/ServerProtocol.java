@@ -181,7 +181,7 @@ public class ServerProtocol implements Runnable {
 	 *            Y-coördinaat
 	 */
 	public void move(int x, int y) {
-		handler.move(Board.toIndex(x, y));
+		handler.server.games[handler.getGameNumber()].getBoard().toIndex(x, y);
 	}
 
 	/**
