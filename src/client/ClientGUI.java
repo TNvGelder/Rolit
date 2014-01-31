@@ -25,18 +25,11 @@ import javax.swing.border.Border;
 
 import game.Board;
 
-<<<<<<< HEAD
-public class ClientGUI extends JFrame implements ActionListener, Observer{
-	private static final int DIM = 8;
-	private Container c = getContentPane();
-	private JPanel boardPanel = new JPanel();
-	private JPanel infoPanel = new JPanel();
-=======
+
 public class ClientGUI extends JFrame{
 	private static final int DIM = 8;
 	private Container c = getContentPane();
 	private JPanel boardPanel = new JPanel();
->>>>>>> 311c7aa2bfb5256a7115ff1218fe5321c734b414
 	private JButton[] buttonArray = new JButton[DIM*DIM];
 	private JLabel turnInfo = new JLabel("Playername's turn");
 	private int boardSize;
@@ -70,7 +63,7 @@ public class ClientGUI extends JFrame{
 			validButton.setEnabled(true);
 			validButton.setBackground(new Color(100,100,100));
 		}
-	}
+	} 
 	
 	/**
 	 *Changes the colour of buttonArray[i]
@@ -97,13 +90,9 @@ public class ClientGUI extends JFrame{
 	 * Builds the gui.
 	 */
 	public void init(){
-<<<<<<< HEAD
-		for (int i = 0; i < DIM*DIM ; i++){
-			Border boardLine = BorderFactory.createLineBorder(Color.black);
-=======
+
 		Border boardLine = BorderFactory.createLineBorder(Color.black);
 		for (int i = 0; i < DIM*DIM; i++){
->>>>>>> 311c7aa2bfb5256a7115ff1218fe5321c734b414
 			
 			JButton fieldButton = new JButton();
 			fieldButton.setBackground(new Color(0,0,0));
