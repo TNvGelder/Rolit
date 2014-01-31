@@ -1,6 +1,6 @@
-package rolit.model.networking.client;
+package client;
 
-import rolit.model.networking.common.CommonProtocol;
+import network.CommonProtocol;
 
 /**
  * @author Pieter Bos
