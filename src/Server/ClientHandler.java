@@ -45,7 +45,6 @@ public class ClientHandler extends Thread implements Observer{
 				}
 				
 				if (protocol.isValidCommand(msg)) {
-				 
 					try {
 						protocol.doCommand(msg);
 					} catch (IllegalArgumentException e) {
