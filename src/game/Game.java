@@ -99,10 +99,6 @@ public class Game{
 	 * Start this game, and ask for moves by iterating over the clienthandlers.
 	 */
 	public void startGame(){
-		Iterator<ClientHandler> clhandlers = playerlist.iterator();
-		while (clhandlers.hasNext()){
-			clhandlers.next().addGame(this);
-		}
 		if (playerlist.size()<2 || playerlist.size()>4) {
 			//TODO: Error: verkeerd aantal spelers.
 			
@@ -125,7 +121,7 @@ public class Game{
 		int i = 0;
 		while (!board.isFull() && i < playerlist.size()){
 			ClientHandler currentPlay = playerlist.get(i);
-			currentPlay.getMove();
+			doMove(currentPlay.getMove(), currentPlay.getColor());
 			if (i == playerlist.size() - 1){
 				i = 0;
 			}
