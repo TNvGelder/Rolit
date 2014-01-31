@@ -58,6 +58,12 @@ public class Server extends Observable implements Runnable{
 					client.start();
 					lobby.add(client);
 					serverGUI.update(lobby.get(0).getName());
+					if (lobby.size() == 2){
+						createGame("game1");
+						joinGame(lobby.get(0),gamecounter);
+						joinGame(lobby.get(1),gamecounter);
+						startGame(gamecounter);
+					}
 					/* Put handler in waitinglist;
 					while (sc.getGameNumber()==-1){
 						int i = 0;
@@ -153,7 +159,7 @@ public class Server extends Observable implements Runnable{
 		messageAll("Client " + handler.getName() + " has left the game");
 	}
 	
-	public void createGame(String name, int players){
+	public void createGame(String name){
 		if (games[gamecounter] != null){
 			++gamecounter;
 		}
