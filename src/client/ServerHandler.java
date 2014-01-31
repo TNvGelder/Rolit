@@ -32,6 +32,13 @@ public class ServerHandler extends Thread {
 					System.out.println("TestMessage received!");
 					sendMessage("test");
 				}
+				if (msg.toLowerCase().startsWith("movedone")){
+					String[] argumentArray = msg.split(" ");
+					client.move(Integer.parseInt(argumentArray[2]), Integer.parseInt(argumentArray[3]));
+				}
+				if (msg.toLowerCase().startsWith("move")){
+					client.doMove();
+				}
 			}
 		}	
 		catch (IOException e){
@@ -39,6 +46,9 @@ public class ServerHandler extends Thread {
 		}
 	}
 	
+	/**
+	 * Stuurt een message naar de clienthandler.
+	 */
 	public void sendMessage(String msg){
 		System.out.println("Sending: " + msg);
 		if (msg != null){

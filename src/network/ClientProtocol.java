@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import client.ServerHandler;
-
+//Deze hoort hier niet?
 public class ClientProtocol {
 
         /**

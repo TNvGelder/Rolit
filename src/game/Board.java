@@ -130,11 +130,10 @@ public class Board {
 	 * @param activeplayer
 	 * @param index
 	 */
-	public void move(int x, int y, FieldType player){		
-		if (isValid(x, y, player)){
-			setField(x, y, player);
-			beat(x,y,player,true);
-			//Als valid move is, zijn ook de stenen al gezet.
+	public void move(int x, int y, FieldType color){		
+		if (isValid(x, y, color)){
+			setField(x, y, color);
+			beat(x,y,color,true);
 		}
 		else System.out.println("Error: invalid move");
 	}

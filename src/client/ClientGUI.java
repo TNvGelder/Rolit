@@ -59,6 +59,9 @@ public class ClientGUI extends JFrame{
 		 });
 	}
 	
+	/**
+	 *Enables the valid buttons in the gui and gives them a grey colour.
+	 */
 	public void makeMove(){
 		validList =  client.getValidMoves();
 		Iterator<Integer> validIterator = validList.iterator();
@@ -69,6 +72,9 @@ public class ClientGUI extends JFrame{
 		}
 	}
 	
+	/**
+	 *Changes the colour of buttonArray[i]
+	 */
 	public void setField(int i, FieldType color) {
 		if (color == FieldType.RED){
 			buttonArray[i].setBackground(new Color(255,0,0));	
@@ -87,6 +93,9 @@ public class ClientGUI extends JFrame{
 		}
 	}
 
+	/**
+	 * Builds the gui.
+	 */
 	public void init(){
 <<<<<<< HEAD
 		for (int i = 0; i < DIM*DIM ; i++){

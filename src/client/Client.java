@@ -31,7 +31,6 @@ public class Client extends Thread{
 
 	
 	public Client(String name, InetAddress address, int port, String kindOfPlayer, int players){
-		//TODO: stuff ;maak serverhandler-> doe communicatie met server;
 		this.kindOfPlayer = kindOfPlayer;
 		playerCount = players;
 		this.name = name;
@@ -61,7 +60,7 @@ public class Client extends Thread{
 	}
 	
 	/**
-	 * Zend een zet naar de ServerHandler
+	 * Stuurt een zet naar de ClientHandler. Indien de move niet geldig is vraagt het opnieuw voor een move.
 	 */
 	public void sendMove(int move){
 		if (!validMoves.contains(move)){
@@ -73,15 +72,29 @@ public class Client extends Thread{
 		}
 		
 	}
-	
+	/**
+	 * returnt de waarde van de validMoves instantie. Let op: Deze lijst word alleen geupdate wanneer de speler aan de beurt is.
+	 * @return validMoves
+	 */
 	public List<Integer> getValidMoves(){
-		return clientBoard.getValidList(currentColor);
+		return validMoves;
 	}
 	
+	public void move(int x, int y){
+		clientBoard.move(x, y, currentColor);
+	}
+	
+	/**
+	 * Zorgt dat de validMove lijst in client up to date is.
+	 */
+	public void updateValidMoves(){
+		validMoves = clientBoard.getValidList(currentColor);
+	}
 	/**
 	 *Zorgt ervoor dat de player weet dat hij aan de beurt is en geeft een lijst van geldige zetten aan de player. 
 	 */
 	public void doMove(){
+		updateValidMoves();
 		if (kindOfPlayer == "Human"){
 			clientGui.makeMove();
 		}
@@ -90,6 +103,10 @@ public class Client extends Thread{
 		}
 	}
 	
+	/**
+	 *Returnt de move die het meeste oplevert.
+	 *@return bestGain
+	 */
 	public int getHint(){
 		int bestMove = -1;
 		int bestGain = 0;
@@ -111,6 +128,11 @@ public class Client extends Thread{
 		return bestMove;
 	}
 	
+	/**
+	 *Returnt hoeveel een bepaalde move oplevert.
+	 *@param Board board
+	 *@param int fieldIndex
+	 */
 	public int tryBeat(Board board, int fieldIndex) {
 		return board.beat(fieldIndex, currentColor, false);
 		
