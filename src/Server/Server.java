@@ -61,7 +61,9 @@ public class Server extends Observable implements Runnable{
 					serverGUI.update(lobby.get(0).getName());
 					if (lobby.size() == 2){
 						createGame("game1");
+						addObserver(lobby.get(0));
 						joinGame(lobby.get(0),gamecounter);
+						addObserver(lobby.get(0));
 						joinGame(lobby.get(0),gamecounter);
 						startGame(gamecounter);
 					}
@@ -129,6 +131,7 @@ public class Server extends Observable implements Runnable{
 	 */
 	public synchronized boolean addHandler(ClientHandler handler) {
 		boolean existing = false;
+		System.out.println("addHandler reached");
 		for(Iterator<ClientHandler> iterator = clients.iterator(); iterator.hasNext();){
 			if (((ClientHandler) iterator.next()).getClientName().equals(handler.getClientName())){
 				existing = true;
