@@ -33,6 +33,7 @@ public class ServerHandler extends Thread {
 					sendMessage("test");
 				}
 				if (msg.toLowerCase().startsWith("movedone")){
+					System.out.println("moved");
 					String[] argumentArray = msg.split(" ");
 					client.move(Integer.parseInt(argumentArray[2]), Integer.parseInt(argumentArray[3]));
 				}

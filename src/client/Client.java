@@ -67,7 +67,6 @@ public class Client extends Thread{
 			doMove();
 		}
 		else{
-			currentColor = currentColor.nextFieldType(playerCount);
 			serverhandler.sendMessage("Move " + Board.toXCoord(move) + " " + Board.toYCoord(move));
 		}
 		
