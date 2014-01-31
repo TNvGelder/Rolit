@@ -17,6 +17,7 @@ public class ClientHandler extends Thread {
 	private String          clientName = "[clientName]";
 	private boolean			handshaked = false;
 	private boolean 		active = true;
+	private int				move = -1;
 	private ServerProtocol  protocol = new ServerProtocol(this);
 	private FieldType		fieldtype;
 	public ClientInformation clientInfo;
@@ -104,10 +105,22 @@ public class ClientHandler extends Thread {
 		
 	}
 
-
+	public void move(int index){
+		move = index;
+	}
+	
 	public int getMove() {
-		// TODO Get move from the client.
-		return 0;
+		sendMessage("move");
+		while (move == -1){
+			try {
+				wait(); //TODO Dit kan misschien wat efficienter?
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return move;
+		
 	}
 
 

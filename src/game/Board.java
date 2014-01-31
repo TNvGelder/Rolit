@@ -438,7 +438,7 @@ public class Board {
 	
 	//--- Omrekenen -------------------------------------------------------//
 	//---------------------------------------------------------------------//
-	public int toIndex(int x, int y){
+	public static int toIndex(int x, int y){
 		int i = 0;
 		i += (y* DIM );
 		i += x;
