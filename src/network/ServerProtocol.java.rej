@@ -1,0 +1,9 @@
+diff a/src/network/ServerProtocol.java b/src/network/ServerProtocol.java	(rejected hunks)
+@@ -181,7 +181,6 @@
+ 	 *            Y-co�rdinaat
+ 	 */
+ 	public void move(int x, int y) {
+-		handler.move(Board.toIndex(x, y));
+ 		handler.server.games[handler.getGameNumber()].getBoard().toIndex(x, y);
+ 	}
+ 

@@ -55,12 +55,13 @@ public class Game{
 	 * @param position
 	 * @param color
 	 */
-	public void doMove(int position, FieldType color){
+	public synchronized void doMove(int position, FieldType color){
 		board.move(position, color);
 		System.out.println("\n" + board.toString()+ "\n");
 		if (board.getValidList(color).contains(position)){
 		}
 		server.moveDone(Board.toXCoord(position), Board.toYCoord(position));
+		notify();
 	}
 	
 	/**
@@ -98,7 +99,7 @@ public class Game{
 	/**
 	 * Start this game, and ask for moves by iterating over the clienthandlers.
 	 */
-	public void startGame(){
+	public synchronized void startGame(){
 		if (playerlist.size()<2 || playerlist.size()>4) {
 			//TODO: Error: verkeerd aantal spelers.
 			
@@ -125,7 +126,13 @@ public class Game{
 			if (i == playerlist.size() - 1){
 				i = 0;
 			}
-			else { i++; }
+			try {
+				wait();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			i++;
 		}
 		System.out.println("game over");
 		//TODO: exit gracefully;

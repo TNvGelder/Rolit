@@ -37,6 +37,7 @@ public class Server extends Observable implements Runnable{
 	}
 	
 	public void moveDone(int x, int y){
+		System.out.println("MoveDone sent to clienthandlers");
 		messageAll("moveDone " + "playername " + x + " "+y);
 	}
 

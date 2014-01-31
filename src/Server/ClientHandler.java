@@ -106,11 +106,13 @@ public class ClientHandler extends Thread implements Observer{
 		
 	}
 
-	public void move(int index){
+	public synchronized void move(int index){
 		move = index;
+		System.out.println(move);
+		notify();
 	}
 	
-	public int getMove() {
+	public synchronized int getMove() {
 		sendMessage("move");
 		while (move == -1){
 			try {
@@ -119,6 +121,7 @@ public class ClientHandler extends Thread implements Observer{
 				System.out.println(e.getMessage());;
 			}
 		}
+		System.out.println("move" + move + "returned by getMove()");
 		return move;
 		
 	}
@@ -137,6 +140,7 @@ public class ClientHandler extends Thread implements Observer{
 
 	@Override
 	public void update(Observable o, Object arg) {
+		System.out.println("observer notified");
 		sendMessage((String) arg);
 		
 	}
